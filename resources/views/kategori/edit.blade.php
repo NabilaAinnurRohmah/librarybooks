@@ -1,15 +1,24 @@
 @extends('layouts')
 
 @section('content')
-    <h2>Edit Kategori</h2>
+    <h2 class="page-title">Edit Kategori</h2>
 
-    <form action="{{ route('kategori.update', $kategori->id_kategori) }}" method="POST">
-        @csrf
-        @method('PUT')
+    <div class="form-card">
+        <form action="{{ route('kategori.update', $kategori->id_kategori) }}" method="POST">
+            @csrf
+            @method('PUT')
 
-        <input type="text" name="nama_kategori" value="{{ $kategori->nama_kategori }}"><br><br>
-        <input type="text" name="detail_kategori" value="{{ $kategori->detail_kategori }}"><br><br>
+            <div class="form-group">
+                <label>Nama Kategori</label>
+                <input type="text" name="nama_kategori" value="{{ $kategori->nama_kategori }}">
+            </div>
 
-        <button type="submit">Update</button>
-    </form>
+            <div class="form-group">
+                <label>Detail Kategori</label>
+                <input type="text" name="detail_kategori" value="{{ $kategori->detail_kategori }}">
+            </div>
+
+            <button type="submit" class="btn-submit">Update</button>
+        </form>
+    </div>
 @endsection

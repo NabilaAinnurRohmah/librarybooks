@@ -3,6 +3,7 @@
 
 <head>
     <title>Perpustakaan</title>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <style>
         body {
             margin: 0;

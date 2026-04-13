@@ -1,10 +1,23 @@
 @extends('layouts')
 
 @section('content')
-    <h2>Detail Kategori</h2>
+    <h2 class="page-title">Detail Kategori</h2>
 
-    <p><b>Nama:</b> {{ $kategori->nama_kategori }}</p>
-    <p><b>Detail:</b> {{ $kategori->detail_kategori }}</p>
+    <div class="detail-card">
 
-    <a href="{{ route('kategori.index') }}">Kembali</a>
+        <div class="detail-row">
+            <div class="label">Nama Kategori</div>
+            <div class="value">📂 {{ $kategori->nama_kategori }}</div>
+        </div>
+
+        <div class="detail-row">
+            <div class="label">Detail</div>
+            <div class="value long-text">
+                {{ $kategori->detail_kategori }}
+            </div>
+        </div>
+
+        <a href="{{ route('kategori.index') }}" class="btn-back">← Kembali</a>
+
+    </div>
 @endsection

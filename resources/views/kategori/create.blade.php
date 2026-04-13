@@ -1,14 +1,23 @@
 @extends('layouts')
 
 @section('content')
-    <h2>Tambah Kategori</h2>
+    <h2 class="page-title">Tambah Kategori</h2>
 
-    <form action="{{ route('kategori.store') }}" method="POST">
-        @csrf
+    <div class="form-card">
+        <form action="{{ route('kategori.store') }}" method="POST">
+            @csrf
 
-        <input type="text" name="nama_kategori" placeholder="Nama"><br><br>
-        <input type="text" name="detail_kategori" placeholder="Detail"><br><br>
+            <div class="form-group">
+                <label>Nama Kategori</label>
+                <input type="text" name="nama_kategori" placeholder="Masukkan nama kategori">
+            </div>
 
-        <button type="submit">Simpan</button>
-    </form>
+            <div class="form-group">
+                <label>Detail Kategori</label>
+                <input type="text" name="detail_kategori" placeholder="Masukkan detail kategori">
+            </div>
+
+            <button type="submit" class="btn-submit">Simpan</button>
+        </form>
+    </div>
 @endsection
