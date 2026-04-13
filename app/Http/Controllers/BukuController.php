@@ -13,6 +13,9 @@ class BukuController extends Controller
      */
     public function index()
     {
+        if(!session()->has('user')){
+            return redirect('/login');
+        }
         $buku = Buku::with('kategori')->get();
         return view('buku.index', compact('buku'));
     }

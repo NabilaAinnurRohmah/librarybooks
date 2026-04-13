@@ -18,14 +18,14 @@ use App\Http\Controllers\KategoriController;
 */
 
 Route::get('/', function () {
-    return view('login');
+    return redirect()->route('login');
 });
-Route::post('/login', [AuthController::class, 'login']);
-Route::get('/login', [AuthController::class, 'showLogin']);
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.process');
 
-Route::get('/logout', [AuthController::class, 'logout']);
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/dashboard', [DashboardController::class, 'index']);
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 Route::get('/buku', [BukuController::class, 'index'])->name('buku.index');
 Route::get('/buku/create', [BukuController::class, 'create'])->name('buku.create');

@@ -34,7 +34,6 @@
             </div>
         </div>
 
-        {{-- SINOPSIS --}}
         <div class="detail-row">
             <div class="label">Sinopsis</div>
             <div class="value long-text">

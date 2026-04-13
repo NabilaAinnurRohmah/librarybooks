@@ -39,7 +39,6 @@
                 </select>
             </div>
 
-            {{-- SINOPSIS --}}
             <div class="form-group">
                 <label>Sinopsis</label>
                 <textarea name="sinopsis" rows="4" placeholder="Masukkan sinopsis buku">{{ $buku->sinopsis }}</textarea>

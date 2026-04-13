@@ -1,3 +1,61 @@
+/* LAYOUT UTAMA */
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+}
+
+.sidebar {
+    width: 220px;
+    height: 100vh;
+    background: #2c3e50;
+    color: white;
+    position: fixed;
+}
+
+.sidebar h2 {
+    text-align: center;
+    background: rgb(56, 99, 56);
+    padding: 10px;
+    margin: 0;
+}
+
+.sidebar-title {
+    text-align: center;
+    background: rgb(56, 99, 56);
+    padding: 10px;
+    margin: 0;
+}
+
+.sidebar a {
+    display: block;
+    color: white;
+    padding: 12px 20px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    background: #34495e;
+}
+
+.main {
+    margin-left: 220px;
+    width: 100%;
+}
+
+.topbar {
+    background: #ecf0f1;
+    padding: 15px 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.content {
+    padding: 20px;
+}
+
 /* STYLE LOGIN */
 .login-page {
     margin: 0;
@@ -194,7 +252,7 @@
     color: #888;
 }
 
-/* INDEX BUKU */
+/* INDEX BUKU & KATEGORI*/
 .page-title {
     margin-bottom: 15px;
 }
@@ -298,13 +356,13 @@
     background: #c0392b;
 }
 
-/* CREATE DAN EDIT BUKU */
+/* CREATE DAN EDIT BUKU & KATEGORI */
 .form-card {
     background: #fff;
     padding: 25px;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
+    max-width: 800px;
 }
 
 .form-group {
@@ -357,10 +415,9 @@
     padding: 25px;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
+    max-width: 900px;
 }
 
-/* Layout 2 kolom */
 .detail-row {
     display: grid;
     grid-template-columns: 150px 1fr;
@@ -369,23 +426,19 @@
     border-bottom: 1px solid #eee;
 }
 
-/* Label kiri */
 .label {
     font-weight: 600;
     color: #555;
 }
 
-/* Value kanan */
 .value {
     color: #333;
 }
 
-/* Text panjang */
 .long-text {
     line-height: 1.6;
 }
 
-/* Tombol kembali */
 .btn-back {
     display: inline-block;
     margin-top: 20px;
@@ -401,7 +454,6 @@
     background: #2980b9;
 }
 
-/* TEXTAREA (SINOPSIS) */
 .form-group textarea {
     width: 100%;
     padding: 10px;
@@ -419,19 +471,16 @@
     box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
 }
 
-/* SINOPSIS DI DETAIL */
 .long-text {
     line-height: 1.7;
     text-align: justify;
     color: #444;
 }
 
-/* BIAR VALUE TURUN RAPI KALAU PANJANG */
 .detail-row .value {
     word-break: break-word;
 }
 
-/* OPTIONAL: AKSEN CARD BIAR LEBIH HIDUP */
 .detail-card {
     border-left: 4px solid #3498db;
 }
