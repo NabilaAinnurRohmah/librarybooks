@@ -10,12 +10,19 @@ class KategoriController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         if(!session()->has('user')){
             return redirect('/login');
         }
-        $kategori = Kategori::all();
+        $kategori = Kategori::query();
+
+        if ($request->search) {
+        $kategori->where('nama_kategori', 'ilike', '%' . $request->search . '%');
+    }
+
+    $kategori = $kategori->get();
+
         return view('kategori.index', compact('kategori'));
     }
 

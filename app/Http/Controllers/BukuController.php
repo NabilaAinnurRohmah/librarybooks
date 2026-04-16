@@ -11,12 +11,24 @@ class BukuController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         if(!session()->has('user')){
             return redirect('/login');
         }
-        $buku = Buku::with('kategori')->get();
+        $buku = Buku::with('kategori');
+         if ($request->search) {
+        $buku->where(function($query) use ($request) {
+            $query->where('judul_buku', 'ilike', '%' . $request->search . '%')
+                  ->orWhere('pengarang', 'ilike', '%' . $request->search . '%')
+                  ->orWhereHas('kategori', function ($q) use ($request) {
+                      $q->where('nama_kategori', 'ilike', '%' . $request->search . '%');
+                  });
+        });
+    }
+
+    $buku = $buku->get();
+
         return view('buku.index', compact('buku'));
     }
 

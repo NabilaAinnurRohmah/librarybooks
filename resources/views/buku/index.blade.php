@@ -6,6 +6,11 @@
     <a href="{{ route('buku.create') }}" class="btn-add">+ Tambah Buku</a>
 
     <div class="card">
+        <form action="{{ route('buku.index') }}" method="GET" class="search-box">
+            <input type="text" name="search" value="{{ request('search') }}"
+                placeholder="Cari judul, pengarang, kategori...">
+            <button type="submit">Cari</button>
+        </form>
         <table class="table-modern">
             <thead>
                 <tr>
