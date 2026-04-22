@@ -40,6 +40,11 @@
             </div>
 
             <div class="form-group">
+                <label>Stok</label>
+                <input type="number" name="stok" value="{{ $buku->stok }}" required>
+            </div>
+
+            <div class="form-group">
                 <label>Sinopsis</label>
                 <textarea name="sinopsis" rows="4" placeholder="Masukkan sinopsis buku">{{ $buku->sinopsis }}</textarea>
             </div>

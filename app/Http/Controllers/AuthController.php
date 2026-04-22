@@ -6,24 +6,29 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    public function showLogin() {
+    public function showLogin()
+    {
         return view('login');
     }
 
-    public function login(Request $request) {
+    public function login(Request $request)
+    {
         $username = $request->username;
         $password = $request->password;
 
-        if($username == "nabila" && $password == "1020") {
+        if ($username == 'nabila' && $password == '1020') {
             session(['user' => $username]);
+
             return redirect('/dashboard');
-        }else{
+        } else {
             return back()->with('error', 'Username atau Password Salah, Silahkan Cek Kembali');
         }
     }
 
-    public function logout() {
+    public function logout()
+    {
         session()->forget('user');
+
         return redirect('/login');
     }
 }

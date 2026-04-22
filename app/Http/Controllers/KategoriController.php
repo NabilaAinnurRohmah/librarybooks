@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Kategori;
+use Illuminate\Http\Request;
 
 class KategoriController extends Controller
 {
@@ -12,16 +12,16 @@ class KategoriController extends Controller
      */
     public function index(Request $request)
     {
-        if(!session()->has('user')){
+        if (! session()->has('user')) {
             return redirect('/login');
         }
         $kategori = Kategori::query();
 
         if ($request->search) {
-        $kategori->where('nama_kategori', 'ilike', '%' . $request->search . '%');
-    }
+            $kategori->search($request->search);
+        }
 
-    $kategori = $kategori->get();
+        $kategori = $kategori->get();
 
         return view('kategori.index', compact('kategori'));
     }
@@ -40,6 +40,7 @@ class KategoriController extends Controller
     public function store(Request $request)
     {
         Kategori::create($request->all());
+
         return redirect()->route('kategori.index');
     }
 
@@ -49,7 +50,8 @@ class KategoriController extends Controller
     public function show($id)
     {
         $kategori = Kategori::find($id);
-    return view('kategori.show', compact('kategori'));
+
+        return view('kategori.show', compact('kategori'));
     }
 
     /**
@@ -58,6 +60,7 @@ class KategoriController extends Controller
     public function edit($id)
     {
         $kategori = Kategori::find($id);
+
         return view('kategori.edit', compact('kategori'));
     }
 
@@ -77,7 +80,8 @@ class KategoriController extends Controller
      */
     public function destroy($id)
     {
-         Kategori::destroy($id);
+        Kategori::destroy($id);
+
         return redirect()->route('kategori.index');
     }
 }

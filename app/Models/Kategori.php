@@ -8,13 +8,24 @@ use Illuminate\Database\Eloquent\Model;
 class Kategori extends Model
 {
     use HasFactory;
+
     protected $table = 'kategori_buku';
+
     protected $fillable = ['nama_kategori', 'detail_kategori'];
+
     protected $primaryKey = 'id_kategori';
 
-    public function buku() {
+    public function buku()
+    {
 
         return $this->hasMany(Buku::class, 'id_kategori');
-        
+
+    }
+
+    public function scopeSearch($query, $search)
+    {
+
+        return $query->where('nama_kategori', 'ilike', "%$search%");
+
     }
 }

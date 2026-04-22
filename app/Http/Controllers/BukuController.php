@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Buku;
 use App\Models\Kategori;
+use Illuminate\Http\Request;
 
 class BukuController extends Controller
 {
@@ -13,21 +13,15 @@ class BukuController extends Controller
      */
     public function index(Request $request)
     {
-        if(!session()->has('user')){
+        if (! session()->has('user')) {
             return redirect('/login');
         }
         $buku = Buku::with('kategori');
-         if ($request->search) {
-        $buku->where(function($query) use ($request) {
-            $query->where('judul_buku', 'ilike', '%' . $request->search . '%')
-                  ->orWhere('pengarang', 'ilike', '%' . $request->search . '%')
-                  ->orWhereHas('kategori', function ($q) use ($request) {
-                      $q->where('nama_kategori', 'ilike', '%' . $request->search . '%');
-                  });
-        });
-    }
+        if ($request->search) {
+            $buku->search($request->search);
+        }
 
-    $buku = $buku->get();
+        $buku = $buku->get();
 
         return view('buku.index', compact('buku'));
     }
@@ -37,7 +31,8 @@ class BukuController extends Controller
      */
     public function create()
     {
-        $kategori= Kategori::all();
+        $kategori = Kategori::all();
+
         return view('buku.create', compact('kategori'));
     }
 
@@ -47,6 +42,7 @@ class BukuController extends Controller
     public function store(Request $request)
     {
         Buku::create($request->all());
+
         return redirect()->route('buku.index');
     }
 
@@ -55,8 +51,9 @@ class BukuController extends Controller
      */
     public function show($id)
     {
-         $buku = Buku::with('kategori')->find($id);
-    return view('buku.show', compact('buku'));
+        $buku = Buku::with('kategori')->find($id);
+
+        return view('buku.show', compact('buku'));
     }
 
     /**
@@ -66,6 +63,7 @@ class BukuController extends Controller
     {
         $buku = Buku::find($id);
         $kategori = Kategori::all();
+
         return view('buku.edit', compact('buku', 'kategori'));
     }
 
@@ -86,6 +84,7 @@ class BukuController extends Controller
     public function destroy($id)
     {
         Buku::destroy($id);
+
         return redirect()->route('buku.index');
     }
 }

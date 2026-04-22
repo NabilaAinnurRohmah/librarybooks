@@ -39,6 +39,11 @@
             </div>
 
             <div class="form-group">
+                <label>Stok</label>
+                <input type="number" name="stok" required>
+            </div>
+
+            <div class="form-group">
                 <label>Sinopsis</label>
                 <textarea name="sinopsis" rows="4" placeholder="Masukkan sinopsis buku"></textarea>
             </div>

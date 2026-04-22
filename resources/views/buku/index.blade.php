@@ -17,6 +17,7 @@
                     <th>Judul</th>
                     <th>Pengarang</th>
                     <th>Kategori</th>
+                    <th>Stok</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -31,6 +32,7 @@
                                 {{ $b->kategori->nama_kategori ?? '-' }}
                             </span>
                         </td>
+                        <td>{{ $b->stok }}</td>
                         <td class="aksi">
                             <a href="{{ route('buku.show', $b->id_buku) }}" class="btn-detail">Detail</a>
                             <a href="{{ route('buku.edit', $b->id_buku) }}" class="btn-edit">Edit</a>
