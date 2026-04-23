@@ -56,5 +56,4 @@ Route::get('/peminjaman/{id}/edit', [PeminjamanController::class, 'edit'])->name
 Route::put('/peminjaman/{id}', [PeminjamanController::class, 'update'])->name('peminjaman.update');
 Route::delete('/peminjaman/{id}', [PeminjamanController::class, 'destroy'])->name('peminjaman.destroy');
 
-Route::get('/pengembalian', [PengembalianController::class, 'index'])->name('pengembalian.index');
 Route::post('/pengembalian/kembali/{id}', [PengembalianController::class, 'kembali'])->name('pengembalian.kembali');

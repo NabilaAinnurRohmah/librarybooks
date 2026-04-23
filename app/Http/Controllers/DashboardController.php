@@ -10,7 +10,7 @@ class DashboardController extends Controller
     public function index()
     {
         if (! session()->has('user')) {
-            return redirect('/login');
+            return redirect()->route('login');
         }
 
         return view('dashboard',

@@ -8,9 +8,6 @@ use Illuminate\Http\Request;
 
 class PeminjamanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         $query = Peminjaman::with('buku');
@@ -24,9 +21,6 @@ class PeminjamanController extends Controller
         return view('peminjaman.index', compact('data'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $buku = Buku::all();
@@ -34,14 +28,13 @@ class PeminjamanController extends Controller
         return view('peminjaman.create', compact('buku'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
             'nama_peminjam' => 'required',
             'id_buku' => 'required',
+            'tanggal_pinjam' => 'required|date',
+            'jatuh_tempo' => 'required|date|after_or_equal:tanggal_pinjam',
         ]);
 
         $buku = Buku::findOrFail($request->id_buku);
@@ -55,16 +48,14 @@ class PeminjamanController extends Controller
         Peminjaman::create([
             'nama_peminjam' => $request->nama_peminjam,
             'id_buku' => $request->id_buku,
-            'tanggal_pinjam' => now(),
+            'tanggal_pinjam' => $request->tanggal_pinjam,
+            'jatuh_tempo' => $request->jatuh_tempo,
             'status' => 'dipinjam',
         ]);
 
         return redirect()->route('peminjaman.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $data = Peminjaman::with('buku')->findOrFail($id);
@@ -72,9 +63,6 @@ class PeminjamanController extends Controller
         return view('peminjaman.show', compact('data'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         $data = Peminjaman::find($id);
@@ -83,29 +71,27 @@ class PeminjamanController extends Controller
         return view('peminjaman.edit', compact('data', 'buku'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        $data = Peminjaman::find($id);
+        $data = Peminjaman::findOrFail($id);
 
         $request->validate([
             'nama_peminjam' => 'required',
             'id_buku' => 'required',
+            'tanggal_pinjam' => 'required|date',
+            'jatuh_tempo' => 'required|date|after_or_equal:tanggal_pinjam',
         ]);
 
         $data->update([
             'nama_peminjam' => $request->nama_peminjam,
             'id_buku' => $request->id_buku,
+            'tanggal_pinjam' => $request->tanggal_pinjam,
+            'jatuh_tempo' => $request->jatuh_tempo,
         ]);
 
         return redirect()->route('peminjaman.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         Peminjaman::destroy($id);

@@ -19,7 +19,7 @@ class AuthController extends Controller
         if ($username == 'nabila' && $password == '1020') {
             session(['user' => $username]);
 
-            return redirect('/dashboard');
+            return redirect()->route('dashboard');
         } else {
             return back()->with('error', 'Username atau Password Salah, Silahkan Cek Kembali');
         }
@@ -29,6 +29,6 @@ class AuthController extends Controller
     {
         session()->forget('user');
 
-        return redirect('/login');
+        return redirect()->route('login');
     }
 }

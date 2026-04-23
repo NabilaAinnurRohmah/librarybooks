@@ -20,6 +20,14 @@
                 @endforeach
             </select>
 
+            <label>Tanggal Pinjam</label>
+            <input type="date" name="tanggal_pinjam"
+                value="{{ \Carbon\Carbon::parse($data->tanggal_pinjam)->format('d-m-Y') }}">
+
+            <label>Jatuh Tempo</label>
+            <input type="date" name="jatuh_tempo"
+                value="{{ $data->jatuh_tempo ? \Carbon\Carbon::parse($data->jatuh_tempo)->format('d-m-Y') : '' }}">
+
             <button type="submit">Update</button>
         </form>
     </div>

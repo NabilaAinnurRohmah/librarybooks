@@ -14,7 +14,7 @@ class BukuController extends Controller
     public function index(Request $request)
     {
         if (! session()->has('user')) {
-            return redirect('/login');
+            return redirect()->route('login');
         }
         $buku = Buku::with('kategori');
         if ($request->search) {

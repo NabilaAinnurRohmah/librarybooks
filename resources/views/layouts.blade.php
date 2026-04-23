@@ -15,7 +15,6 @@
         <a href="{{ route('buku.index') }}">Buku</a>
         <a href="{{ route('kategori.index') }}">Kategori</a>
         <a href="{{ route('peminjaman.index') }}">Peminjaman</a>
-        <a href="{{ route('pengembalian.index') }}">Pengembalian</a>
         <a href="{{ route('logout') }}">Logout</a>
     </div>
 

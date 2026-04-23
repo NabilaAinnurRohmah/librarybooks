@@ -19,6 +19,12 @@
                 @endforeach
             </select>
 
+            <label>Tanggal Pinjam</label>
+            <input type="date" name="tanggal_pinjam" value="{{ date('Y-m-d') }}">
+
+            <label>Jatuh Tempo</label>
+            <input type="date" name="jatuh_tempo" required>
+
             <button type="submit">Pinjam Buku</button>
         </form>
     </div>
