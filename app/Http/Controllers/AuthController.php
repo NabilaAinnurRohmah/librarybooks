@@ -16,19 +16,30 @@ class AuthController extends Controller
         $username = $request->username;
         $password = $request->password;
 
-        if ($username == 'nabila' && $password == '1020') {
-            session(['user' => $username]);
+        if ($username == 'admin' && $password == '123') {
+            session([
+                'user' => $username,
+                'role' => 'admin',
+            ]);
 
             return redirect()->route('dashboard');
-        } else {
-            return back()->with('error', 'Username atau Password Salah, Silahkan Cek Kembali');
         }
+
+        if ($username == 'petugas' && $password == '1020') {
+            session([
+                'user' => $username,
+                'role' => 'petugas',
+            ]);
+
+            return redirect()->route('dashboard');
+        }
+
+        return back()->with('error', 'Username atau Password salah');
     }
 
     public function logout()
     {
-        session()->forget('user');
-
+        session()->flush();
         return redirect()->route('login');
     }
 }

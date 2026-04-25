@@ -23,7 +23,6 @@
                     <th>Tanggal Dikembalikan</th>
                     <th>Durasi</th>
                     <th>Terlambat</th>
-                    <th>Denda</th>
                     <th>Status</th>
                     <th>Aksi</th>
                 </tr>
@@ -36,7 +35,7 @@
             {{ $item->status == 'dikembalikan' ? 'sudah-kembali' : '' }}
             {{ $item->keterlambatan > 0 ? 'terlambat' : '' }}
         ">
-                        <td>{{ $item->nama_peminjam }}</td>
+                        <td>{{ $item->anggota->nama }}</td>
                         <td>{{ $item->id_buku }}</td>
                         <td>{{ $item->buku->judul_buku }}</td>
 
@@ -55,7 +54,7 @@
                         <td>
                             @if ($item->durasi)
                                 <span class="badge-durasi">
-                                    {{ $item->durasi }} hari
+                                    {{ $item->durasi ?? 0 }} hari
                                 </span>
                             @else
                                 -
@@ -69,16 +68,6 @@
                                 </span>
                             @else
                                 <span class="badge-tepat">Tepat waktu</span>
-                            @endif
-                        </td>
-
-                        <td>
-                            @if ($item->denda > 0)
-                                <span class="badge-denda">
-                                    Rp {{ number_format($item->denda) }}
-                                </span>
-                            @else
-                                -
                             @endif
                         </td>
 

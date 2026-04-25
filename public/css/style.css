@@ -59,8 +59,8 @@ body {
 /* STYLE LOGIN */
 .login-page {
     margin: 0;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #075a12, #764ba2);
+    font-family: "Segoe UI", sans-serif;
+    background: linear-gradient(135deg, #1b5e20, #66bb6a);
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -68,42 +68,55 @@ body {
 }
 
 .login-box {
-    background: linear-gradient(135deg, #b9e4bd, #e3dceb);
+    background: white;
     padding: 40px;
-    width: 400px;
-    border-radius: 12px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    width: 380px;
+    border-radius: 18px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
     animation: fadeIn 0.6s ease;
+    text-align: center;
 }
 
 .login-box h1 {
-    text-align: center;
+    margin-bottom: 5px;
+    color: #2e7d32;
+    font-size: 26px;
+}
+
+.login-box p {
+    color: #777;
+    font-size: 14px;
     margin-bottom: 25px;
-    color: #333;
-    font-size: 24px;
 }
 
 .login-box label {
     font-weight: 600;
     font-size: 14px;
     color: #555;
+    display: block;
+    text-align: left;
 }
 
 .login-box input {
     width: 100%;
-    padding: 15px 0px 15px 0px;
+    padding: 12px 14px;
     margin-top: 6px;
     margin-bottom: 15px;
     border: 1px solid #ddd;
     border-radius: 8px;
     outline: none;
     transition: 0.3s;
-    font-size: 16px;
+    font-size: 15px;
+    box-sizing: border-box;
 }
 
 .login-box input:focus {
-    border-color: #667eea;
-    box-shadow: 0 0 5px rgba(102, 126, 234, 0.4);
+    border-color: #2e7d32;
+    box-shadow: 0 0 6px rgba(46, 125, 50, 0.4);
+}
+
+.password-box input {
+    padding-right: 45px;
 }
 
 .password-box {
@@ -112,19 +125,20 @@ body {
 
 .password-box button {
     position: absolute;
-    right: 20px;
-    top: 40px;
+    right: 12px;
+    top: 50px;
     border: none;
+    transform: translateY(-50%);
     background: none;
     cursor: pointer;
-    font-size: 13px;
-    color: #4a357a;
+    font-size: 12px;
+    color: #2e7d32;
 }
 
 .login-box button[type="submit"] {
     width: 100%;
     padding: 12px;
-    background: linear-gradient(135deg, #075a12, #6021a0);
+    background: linear-gradient(135deg, #2e7d32, #66bb6a);
     border: none;
     color: white;
     font-weight: 600;
@@ -134,20 +148,8 @@ body {
 }
 
 .login-box button[type="submit"]:hover {
-    background: linear-gradient(135deg, #075a12, #764ba2);
-}
-
-.login-box a {
-    display: block;
-    text-align: center;
-    margin-top: 15px;
-    color: #667eea;
-    text-decoration: none;
-    font-size: 14px;
-}
-
-.login-box a:hover {
-    text-decoration: underline;
+    transform: scale(1.03);
+    background: linear-gradient(135deg, #1b5e20, #43a047);
 }
 
 .error {
@@ -163,7 +165,7 @@ body {
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(-20px);
+        transform: translateY(-25px);
     }
     to {
         opacity: 1;
@@ -198,6 +200,14 @@ body {
 
 .card-box.green {
     background: #2ecc71;
+}
+
+.card-box.yellow {
+    background: #f7f33d;
+}
+
+.card-box.orange {
+    background: #fca432;
 }
 
 .section-title {
@@ -304,6 +314,7 @@ body {
 
 .judul {
     font-weight: 500;
+    white-space: nowrap;
 }
 
 .badge {
@@ -312,6 +323,7 @@ body {
     padding: 5px 10px;
     border-radius: 20px;
     font-size: 12px;
+    white-space: nowrap;
 }
 
 .aksi {

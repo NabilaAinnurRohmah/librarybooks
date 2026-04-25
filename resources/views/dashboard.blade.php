@@ -15,6 +15,16 @@
             <h1>{{ $totalKategori }}</h1>
         </div>
 
+        <div class="card-box yellow">
+            <h3>Dipinjam</h3>
+            <h1>{{ $totalDipinjam }}</h1>
+        </div>
+
+        <div class="card-box orange">
+            <h3>Dikembalikan</h3>
+            <h1>{{ $totalDikembalikan }}</h1>
+        </div>
+
     </div>
 
     <h3 class="section-title">Buku Terbaru</h3>

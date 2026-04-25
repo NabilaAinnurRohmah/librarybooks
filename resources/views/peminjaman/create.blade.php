@@ -8,7 +8,13 @@
             @csrf
 
             <label>Nama</label>
-            <input type="text" name="nama_peminjam">
+            <select name="id_anggota" class="form-control">
+                @foreach ($anggota as $a)
+                    <option value="{{ $a->id_anggota }}">
+                        {{ $a->nama }}
+                    </option>
+                @endforeach
+            </select>
 
             <label>Buku</label>
             <select name="id_buku">

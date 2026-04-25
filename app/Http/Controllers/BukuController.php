@@ -13,15 +13,15 @@ class BukuController extends Controller
      */
     public function index(Request $request)
     {
-        if (! session()->has('user')) {
-            return redirect()->route('login');
-        }
         $buku = Buku::with('kategori');
         if ($request->search) {
             $buku->search($request->search);
         }
 
         $buku = $buku->get();
+        if (session('role') == 'admin') {
+            return view('buku.index_admin', compact('buku'));
+        }
 
         return view('buku.index', compact('buku'));
     }

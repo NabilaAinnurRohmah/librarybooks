@@ -12,6 +12,7 @@
         <h2 class="sidebar-title">Menu</h2>
 
         <a href="{{ route('dashboard') }}">Dashboard</a>
+        <a href="{{ route('anggota.index') }}">Data Anggota</a>
         <a href="{{ route('buku.index') }}">Buku</a>
         <a href="{{ route('kategori.index') }}">Kategori</a>
         <a href="{{ route('peminjaman.index') }}">Peminjaman</a>

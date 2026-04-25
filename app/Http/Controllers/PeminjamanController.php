@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Anggota;
 use App\Models\Buku;
 use App\Models\Peminjaman;
 use Illuminate\Http\Request;
@@ -10,7 +11,7 @@ class PeminjamanController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Peminjaman::with('buku');
+        $query = Peminjaman::with(['buku', 'anggota']);
 
         if ($request->search) {
             $query->search($request->search);
@@ -18,20 +19,25 @@ class PeminjamanController extends Controller
 
         $data = $query->get();
 
+        if (session('role') == 'admin') {
+            return view('peminjaman.index_admin', compact('data'));
+        }
+
         return view('peminjaman.index', compact('data'));
     }
 
     public function create()
     {
+        $anggota = Anggota::all();
         $buku = Buku::all();
 
-        return view('peminjaman.create', compact('buku'));
+        return view('peminjaman.create', compact('anggota', 'buku'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'nama_peminjam' => 'required',
+            'id_anggota' => 'required',
             'id_buku' => 'required',
             'tanggal_pinjam' => 'required|date',
             'jatuh_tempo' => 'required|date|after_or_equal:tanggal_pinjam',
@@ -46,7 +52,7 @@ class PeminjamanController extends Controller
         $buku->decrement('stok');
 
         Peminjaman::create([
-            'nama_peminjam' => $request->nama_peminjam,
+            'id_anggota' => $request->id_anggota,
             'id_buku' => $request->id_buku,
             'tanggal_pinjam' => $request->tanggal_pinjam,
             'jatuh_tempo' => $request->jatuh_tempo,
@@ -58,17 +64,18 @@ class PeminjamanController extends Controller
 
     public function show(string $id)
     {
-        $data = Peminjaman::with('buku')->findOrFail($id);
+        $data = Peminjaman::with(['buku', 'anggota'])->findOrFail($id);
 
         return view('peminjaman.show', compact('data'));
     }
 
     public function edit(string $id)
     {
-        $data = Peminjaman::find($id);
+        $data = Peminjaman::findOrFail($id);
+        $anggota = Anggota::all();
         $buku = Buku::all();
 
-        return view('peminjaman.edit', compact('data', 'buku'));
+        return view('peminjaman.edit', compact('data', 'anggota', 'buku'));
     }
 
     public function update(Request $request, string $id)
@@ -76,14 +83,14 @@ class PeminjamanController extends Controller
         $data = Peminjaman::findOrFail($id);
 
         $request->validate([
-            'nama_peminjam' => 'required',
+            'id_anggota' => 'required',
             'id_buku' => 'required',
             'tanggal_pinjam' => 'required|date',
             'jatuh_tempo' => 'required|date|after_or_equal:tanggal_pinjam',
         ]);
 
         $data->update([
-            'nama_peminjam' => $request->nama_peminjam,
+            'id_anggota' => $request->id_anggota,
             'id_buku' => $request->id_buku,
             'tanggal_pinjam' => $request->tanggal_pinjam,
             'jatuh_tempo' => $request->jatuh_tempo,

@@ -6,7 +6,7 @@
     <div class="detail-card">
         <div class="detail-row">
             <div class="label">Nama</div>
-            <div class="value">{{ $data->nama_peminjam }}</div>
+            <div class="value">{{ $data->anggota->nama }}</div>
         </div>
 
         <div class="detail-row">
@@ -43,13 +43,6 @@
             <div class="label">Keterlambatan</div>
             <div class="value">
                 {{ $data->keterlambatan > 0 ? $data->keterlambatan . ' hari' : '-' }}
-            </div>
-        </div>
-
-        <div class="detail-row">
-            <div class="label">Denda</div>
-            <div class="value">
-                {{ $data->denda > 0 ? 'Rp ' . number_format($data->denda) : '-' }}
             </div>
         </div>
 

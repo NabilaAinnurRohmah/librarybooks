@@ -15,7 +15,7 @@ class Peminjaman extends Model
     protected $primaryKey = 'id_peminjaman';
 
     protected $fillable = [
-        'nama_peminjam',
+        'id_anggota',
         'id_buku',
         'judul_buku',
         'tanggal_pinjam',
@@ -23,6 +23,11 @@ class Peminjaman extends Model
         'tanggal_kembali',
         'status',
     ];
+
+    public function anggota()
+    {
+        return $this->belongsTo(Anggota::class, 'id_anggota');
+    }
 
     public function buku()
     {
@@ -32,14 +37,15 @@ class Peminjaman extends Model
     public function scopeSearch($query, $search)
     {
         return $query->where(function ($q) use ($search) {
-            $q->where('nama_peminjam', 'ilike', "%$search%")
+
+            $q->whereHas('anggota', function ($q2) use ($search) {
+                $q2->where('nama', 'ilike', "%$search%");
+            })
                 ->orWhere('id_buku', 'ilike', "%$search%")
                 ->orWhere('status', 'ilike', "%$search%")
-
                 ->orWhereRaw('CAST(tanggal_pinjam AS TEXT) ILIKE ?', ["%$search%"])
                 ->orWhereRaw('CAST(jatuh_tempo AS TEXT) ILIKE ?', ["%$search%"])
                 ->orWhereRaw('CAST(tanggal_kembali AS TEXT) ILIKE ?', ["%$search%"])
-
                 ->orWhereHas('buku', function ($q2) use ($search) {
                     $q2->where('judul_buku', 'ilike', "%$search%");
                 });
@@ -88,10 +94,5 @@ class Peminjaman extends Model
         return $tanggal->gt($batas)
             ? $tanggal->diffInDays($batas)
             : 0;
-    }
-
-    public function getDendaAttribute()
-    {
-        return $this->keterlambatan * 2000;
     }
 }

@@ -9,7 +9,13 @@
             @method('PUT')
 
             <label>Nama</label>
-            <input type="text" name="nama_peminjam" value="{{ $data->nama_peminjam }}">
+            <select name="id_anggota" class="form-control">
+                @foreach ($anggota as $a)
+                    <option value="{{ $a->id_anggota }}" {{ $data->id_anggota == $a->id_anggota ? 'selected' : '' }}>
+                        {{ $a->nama }}
+                    </option>
+                @endforeach
+            </select>
 
             <label>Buku</label>
             <select name="id_buku">
@@ -22,11 +28,11 @@
 
             <label>Tanggal Pinjam</label>
             <input type="date" name="tanggal_pinjam"
-                value="{{ \Carbon\Carbon::parse($data->tanggal_pinjam)->format('d-m-Y') }}">
+                value="{{ \Carbon\Carbon::parse($data->tanggal_pinjam)->format('Y-m-d') }}">
 
             <label>Jatuh Tempo</label>
             <input type="date" name="jatuh_tempo"
-                value="{{ $data->jatuh_tempo ? \Carbon\Carbon::parse($data->jatuh_tempo)->format('d-m-Y') : '' }}">
+                value="{{ $data->jatuh_tempo ? \Carbon\Carbon::parse($data->jatuh_tempo)->format('Y-m-d') : '' }}">
 
             <button type="submit">Update</button>
         </form>
