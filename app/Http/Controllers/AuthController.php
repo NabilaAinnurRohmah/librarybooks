@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pengguna;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -13,22 +14,12 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $username = $request->username;
-        $password = $request->password;
+        $pengguna = Pengguna::cekLogin($request->username, $request->password);
 
-        if ($username == 'admin' && $password == '123') {
+        if ($pengguna) {
             session([
-                'user' => $username,
-                'role' => 'admin',
-            ]);
-
-            return redirect()->route('dashboard');
-        }
-
-        if ($username == 'petugas' && $password == '1020') {
-            session([
-                'user' => $username,
-                'role' => 'petugas',
+                'user' => $pengguna->username,
+                'role' => $pengguna->role,
             ]);
 
             return redirect()->route('dashboard');
@@ -40,6 +31,7 @@ class AuthController extends Controller
     public function logout()
     {
         session()->flush();
+
         return redirect()->route('login');
     }
 }
