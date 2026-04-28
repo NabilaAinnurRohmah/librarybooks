@@ -10,6 +10,11 @@
         </div>
 
         <div class="detail-row">
+            <div class="label">Username</div>
+            <div class="value">{{ $data->pengguna->username ?? '-' }}</div>
+        </div>
+
+        <div class="detail-row">
             <div class="label">Alamat</div>
             <div class="value">{{ $data->alamat ?? '-' }}</div>
         </div>
