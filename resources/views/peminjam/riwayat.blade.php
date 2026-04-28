@@ -7,7 +7,7 @@
         @forelse ($data as $p)
             <div class="riwayat-item">
                 <div>
-                    <strong>{{ $p->buku->judul_buku }}</strong>
+                    <h3>{{ $p->buku->judul_buku }}</h3>
 
                     <p class="tanggal">
                         📅 Pinjam: {{ $p->tanggal_pinjam }}
