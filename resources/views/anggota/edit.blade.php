@@ -10,7 +10,17 @@
 
             <div class="form-group">
                 <label>Nama</label>
-                <input type="text" name="nama" value="{{ $data->nama }}">
+                <input type="text" name="nama" value="{{ $data->nama }}" required>
+            </div>
+
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" value="{{ $data->pengguna->username ?? '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label>Password (Kosongkan jika tidak diubah)</label>
+                <input type="password" name="password">
             </div>
 
             <div class="form-group">

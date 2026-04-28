@@ -19,10 +19,6 @@ class PeminjamanController extends Controller
 
         $data = $query->get();
 
-        if (session('role') == 'admin') {
-            return view('peminjaman.index_admin', compact('data'));
-        }
-
         return view('peminjaman.index', compact('data'));
     }
 
@@ -104,5 +100,27 @@ class PeminjamanController extends Controller
         Peminjaman::destroy($id);
 
         return redirect()->route('peminjaman.index');
+    }
+
+    public function konfirmasi($id)
+    {
+        $data = Peminjaman::findOrFail($id);
+
+        if ($data->status == 'menunggu') {
+
+            $buku = Buku::findOrFail($data->id_buku);
+
+            if ($buku->stok <= 0) {
+                return back()->with('error', 'Stok buku habis!');
+            }
+
+            $buku->decrement('stok');
+
+            $data->update([
+                'status' => 'dipinjam',
+            ]);
+        }
+
+        return back()->with('success', 'Peminjaman dikonfirmasi');
     }
 }

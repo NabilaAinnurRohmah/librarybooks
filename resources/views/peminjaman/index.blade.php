@@ -35,7 +35,7 @@
             {{ $item->status == 'dikembalikan' ? 'sudah-kembali' : '' }}
             {{ $item->keterlambatan > 0 ? 'terlambat' : '' }}
         ">
-                        <td>{{ $item->anggota->nama }}</td>
+                        <td>{{ $item->anggota->nama ?? '-' }}</td>
                         <td>{{ $item->id_buku }}</td>
                         <td>{{ $item->buku->judul_buku }}</td>
 
@@ -52,13 +52,11 @@
                         </td>
 
                         <td>
-                            @if ($item->durasi)
-                                <span class="badge-durasi">
-                                    {{ $item->durasi ?? 0 }} hari
-                                </span>
-                            @else
-                                -
-                            @endif
+
+                            <span class="badge-durasi">
+                                {{ $item->durasi }} hari
+                            </span>
+
                         </td>
 
                         <td>
@@ -78,6 +76,13 @@
                         </td>
 
                         <td class="aksi">
+
+                            @if ($item->status == 'menunggu')
+                                <form action="{{ route('peminjaman.konfirmasi', $item->id_peminjaman) }}" method="POST">
+                                    @csrf
+                                    <button class="btn-kembali">Konfirmasi</button>
+                                </form>
+                            @endif
 
                             @if ($item->status == 'dipinjam')
                                 <form action="{{ route('pengembalian.kembali', $item->id_peminjaman) }}" method="POST"

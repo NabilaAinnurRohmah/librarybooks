@@ -20,10 +20,6 @@ class KategoriController extends Controller
 
         $kategori = $kategori->get();
 
-        if (session('role') == 'admin') {
-            return view('kategori.index_admin', compact('kategori'));
-        }
-
         return view('kategori.index', compact('kategori'));
     }
 

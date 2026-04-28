@@ -11,9 +11,14 @@ class Anggota extends Model
 
     protected $table = 'anggota';
 
-    protected $fillable = ['nama', 'alamat', 'no_hp'];
+    protected $fillable = ['nama', 'alamat', 'no_hp', 'id_pengguna'];
 
     protected $primaryKey = 'id_anggota';
+
+    public function pengguna()
+    {
+        return $this->belongsTo(Pengguna::class, 'id_pengguna');
+    }
 
     public function peminjaman()
     {

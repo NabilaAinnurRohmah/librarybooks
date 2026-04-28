@@ -19,9 +19,6 @@ class BukuController extends Controller
         }
 
         $buku = $buku->get();
-        if (session('role') == 'admin') {
-            return view('buku.index_admin', compact('buku'));
-        }
 
         return view('buku.index', compact('buku'));
     }

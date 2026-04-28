@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Anggota;
+use App\Models\Pengguna;
 use Illuminate\Http\Request;
 
 class AnggotaController extends Controller
@@ -13,10 +14,6 @@ class AnggotaController extends Controller
     public function index()
     {
         $data = Anggota::all();
-
-        if (session('role') == 'admin') {
-            return view('anggota.index_admin', compact('data'));
-        }
 
         return view('anggota.index', compact('data'));
     }
@@ -36,11 +33,24 @@ class AnggotaController extends Controller
     {
         $request->validate([
             'nama' => 'required',
+            'username' => 'required|unique:pengguna,username',
+            'password' => 'required|min:4',
             'alamat' => 'nullable',
             'no_hp' => 'nullable',
         ]);
 
-        Anggota::create($request->all());
+        $pengguna = Pengguna::create([
+            'username' => $request->username,
+            'password' => $request->password,
+            'role' => 'peminjam',
+        ]);
+
+        Anggota::create([
+            'nama' => $request->nama,
+            'alamat' => $request->alamat,
+            'no_hp' => $request->no_hp,
+            'id_pengguna' => $pengguna->id_pengguna,
+        ]);
 
         return redirect()->route('anggota.index');
     }
@@ -74,11 +84,29 @@ class AnggotaController extends Controller
 
         $request->validate([
             'nama' => 'required',
+            'username' => 'required|unique:pengguna,username,'.$data->id_pengguna.',id_pengguna',
+            'password' => 'nullable|min:4',
             'alamat' => 'nullable',
             'no_hp' => 'nullable',
         ]);
 
-        $data->update($request->all());
+        $data->update([
+            'nama' => $request->nama,
+            'alamat' => $request->alamat,
+            'no_hp' => $request->no_hp,
+        ]);
+
+        $pengguna = Pengguna::find($data->id_pengguna);
+
+        if ($pengguna) {
+            $pengguna->username = $request->username;
+
+            if ($request->password) {
+                $pengguna->password = $request->password;
+            }
+
+            $pengguna->save();
+        }
 
         return redirect()->route('anggota.index');
     }

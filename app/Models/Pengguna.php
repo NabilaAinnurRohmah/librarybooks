@@ -11,6 +11,8 @@ class Pengguna extends Model
 
     protected $table = 'pengguna';
 
+    protected $primaryKey = 'id_pengguna';
+
     protected $fillable = [
         'username',
         'password',
