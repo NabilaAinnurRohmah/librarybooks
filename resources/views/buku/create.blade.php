@@ -38,6 +38,18 @@
                 </select>
             </div>
 
+            <div>
+                <label>Rak</label>
+
+                <select name="id_rak">
+                    @foreach ($rak as $item)
+                        <option value="{{ $item->id_rak }}">
+                            {{ $item->nama_rak }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
             <div class="form-group">
                 <label>Stok</label>
                 <input type="number" name="stok" required>

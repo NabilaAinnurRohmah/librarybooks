@@ -11,7 +11,8 @@ class PeminjamanController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Peminjaman::with(['buku', 'anggota']);
+        $query = Peminjaman::with(['buku', 'anggota'])
+            ->whereIn('status', ['menunggu', 'dipinjam']);
 
         if ($request->search) {
             $query->search($request->search);

@@ -35,6 +35,15 @@
         </div>
 
         <div class="detail-row">
+            <div class="label">Rak</div>
+            <div>
+                <span class="badge">
+                    {{ $buku->rak->nama_rak ?? '-' }}
+                </span>
+            </div>
+        </div>
+
+        <div class="detail-row">
             <div class="label">Sinopsis</div>
             <div class="value long-text">
                 {{ $buku->sinopsis ?? '-' }}

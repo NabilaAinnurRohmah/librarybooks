@@ -35,18 +35,6 @@
         </div>
 
         <div class="detail-row">
-            <div class="label">Tanggal Dikembalikan</div>
-            <div class="value">{{ $data->tanggal_kembali ?? '-' }}</div>
-        </div>
-
-        <div class="detail-row">
-            <div class="label">Keterlambatan</div>
-            <div class="value">
-                {{ $data->keterlambatan > 0 ? $data->keterlambatan . ' hari' : '-' }}
-            </div>
-        </div>
-
-        <div class="detail-row">
             <div class="label">Status</div>
             <div class="value">{{ $data->status }}</div>
         </div>

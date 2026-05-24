@@ -40,6 +40,17 @@
             </div>
 
             <div class="form-group">
+                <label>Rak</label>
+                <select name="id_rak">
+                    @foreach ($rak as $r)
+                        <option value="{{ $r->id_rak }}" {{ $buku->id_rak == $k->id_rak ? 'selected' : '' }}>
+                            {{ $r->nama_rak }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-group">
                 <label>Stok</label>
                 <input type="number" name="stok" value="{{ $buku->stok }}" required>
             </div>

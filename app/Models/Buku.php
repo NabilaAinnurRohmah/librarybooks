@@ -11,7 +11,7 @@ class Buku extends Model
 
     protected $table = 'buku';
 
-    protected $fillable = ['judul_buku', 'pengarang', 'tahun_terbit', 'penerbit', 'sinopsis', 'stok', 'id_kategori'];
+    protected $fillable = ['judul_buku', 'pengarang', 'tahun_terbit', 'penerbit', 'sinopsis', 'stok', 'id_kategori', 'id_rak'];
 
     protected $primaryKey = 'id_buku';
 
@@ -20,6 +20,11 @@ class Buku extends Model
 
         return $this->belongsTo(Kategori::class, 'id_kategori');
 
+    }
+
+    public function rak()
+    {
+        return $this->belongsTo(Rak::class, 'id_rak');
     }
 
     public function scopeSearch($query, $search)

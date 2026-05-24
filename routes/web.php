@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PengembalianController;
+use App\Http\Controllers\RakController;
 use App\Http\Controllers\UserPeminjamController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,7 +24,10 @@ Route::middleware(['auth.check', 'role:admin'])->group(function () {
     Route::resource('anggota', AnggotaController::class);
     Route::resource('buku', BukuController::class);
     Route::resource('kategori', KategoriController::class);
+    Route::resource('rak', RakController::class);
     Route::resource('peminjaman', PeminjamanController::class);
+    Route::get('/pengembalian', [PengembalianController::class, 'index'])
+        ->name('pengembalian.index');
     Route::post('/pengembalian/kembali/{id}', [PengembalianController::class, 'kembali'])
         ->name('pengembalian.kembali');
     Route::post('/peminjaman/konfirmasi/{id}', [PeminjamanController::class, 'konfirmasi'])

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Buku;
 use App\Models\Kategori;
+use App\Models\Rak;
 use Illuminate\Http\Request;
 
 class BukuController extends Controller
@@ -13,7 +14,7 @@ class BukuController extends Controller
      */
     public function index(Request $request)
     {
-        $buku = Buku::with('kategori');
+        $buku = Buku::with(['kategori', 'rak']);
         if ($request->search) {
             $buku->search($request->search);
         }
@@ -30,7 +31,9 @@ class BukuController extends Controller
     {
         $kategori = Kategori::all();
 
-        return view('buku.create', compact('kategori'));
+        $rak = Rak::all();
+
+        return view('buku.create', compact('kategori', 'rak'));
     }
 
     /**
@@ -48,7 +51,7 @@ class BukuController extends Controller
      */
     public function show($id)
     {
-        $buku = Buku::with('kategori')->find($id);
+        $buku = Buku::with(['kategori', 'rak'])->find($id);
 
         return view('buku.show', compact('buku'));
     }
@@ -61,7 +64,9 @@ class BukuController extends Controller
         $buku = Buku::find($id);
         $kategori = Kategori::all();
 
-        return view('buku.edit', compact('buku', 'kategori'));
+        $rak = Rak::all();
+
+        return view('buku.edit', compact('buku', 'kategori', 'rak'));
     }
 
     /**

@@ -20,9 +20,7 @@
                     <th>Buku</th>
                     <th>Tanggal Pinjam</th>
                     <th>Jatuh Tempo</th>
-                    <th>Tanggal Dikembalikan</th>
                     <th>Durasi</th>
-                    <th>Terlambat</th>
                     <th>Status</th>
                     <th>Aksi</th>
                 </tr>
@@ -44,29 +42,11 @@
                         <td>{{ $item->jatuh_tempo ?? '-' }}</td>
 
                         <td>
-                            @if ($item->tanggal_kembali)
-                                {{ $item->tanggal_kembali }}
-                            @else
-                                -
-                            @endif
-                        </td>
-
-                        <td>
 
                             <span class="badge-durasi">
                                 {{ $item->durasi }} hari
                             </span>
 
-                        </td>
-
-                        <td>
-                            @if ($item->keterlambatan > 0)
-                                <span class="badge-terlambat">
-                                    {{ $item->keterlambatan }} hari
-                                </span>
-                            @else
-                                <span class="badge-tepat">Tepat waktu</span>
-                            @endif
                         </td>
 
                         <td>

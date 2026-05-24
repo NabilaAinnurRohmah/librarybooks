@@ -17,6 +17,7 @@
                     <th>Judul</th>
                     <th>Pengarang</th>
                     <th>Kategori</th>
+                    <th>Rak</th>
                     <th>Stok</th>
                     <th>Aksi</th>
                 </tr>
@@ -32,6 +33,13 @@
                                 {{ $b->kategori->nama_kategori ?? '-' }}
                             </span>
                         </td>
+
+                        <td>
+                            <span class="badge">
+                                {{ $b->rak->nama_rak ?? '-' }}
+                            </span>
+                        </td>
+
                         <td>{{ $b->stok }}</td>
                         <td class="aksi">
                             <a href="{{ route('buku.show', $b->id_buku) }}" class="btn-detail">Detail</a>
