@@ -8,6 +8,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PengembalianController;
 use App\Http\Controllers\RakController;
+use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UserPeminjamController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +19,8 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.process');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/register', [RegisterController::class, 'showRegister'])->name('register');
+Route::post('/register', [RegisterController::class, 'register'])->name('register.process');
 
 Route::middleware(['auth.check', 'role:admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -30,8 +33,6 @@ Route::middleware(['auth.check', 'role:admin'])->group(function () {
         ->name('pengembalian.index');
     Route::post('/pengembalian/kembali/{id}', [PengembalianController::class, 'kembali'])
         ->name('pengembalian.kembali');
-    Route::post('/peminjaman/konfirmasi/{id}', [PeminjamanController::class, 'konfirmasi'])
-        ->name('peminjaman.konfirmasi');
 
 });
 
@@ -40,8 +41,10 @@ Route::middleware(['auth.check', 'role:peminjam'])->group(function () {
         ->name('peminjam.buku');
     Route::get('/buku/{id}', [UserPeminjamController::class, 'show'])
         ->name('peminjam.detail');
-    Route::get('/riwayat', [UserPeminjamController::class, 'riwayat'])
-        ->name('peminjam.riwayat');
+    Route::get('/pengembalian', [UserPeminjamController::class, 'pengembalian'])
+        ->name('peminjam.pengembalian');
+    Route::get('/peminjaman', [UserPeminjamController::class, 'peminjaman'])
+        ->name('peminjam.peminjaman');
     Route::post('/pinjam', [UserPeminjamController::class, 'store'])
         ->name('peminjam.pinjam');
 });

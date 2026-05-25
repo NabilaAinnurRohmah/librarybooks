@@ -1,4 +1,4 @@
-@extends('layouts')
+@extends('layouts.main')
 
 @section('content')
     <h2 class="page-title">Data Peminjaman</h2>
@@ -6,13 +6,20 @@
     <a href="{{ route('peminjaman.create') }}" class="btn-add">+ Pinjam Buku</a>
 
     <div class="card">
+
         <form action="{{ route('peminjaman.index') }}" method="GET" class="search-box">
+
             <input type="text" name="search" value="{{ request('search') }}"
                 placeholder="Cari nama, judul buku, kode buku....">
-            <button type="submit">Cari</button>
+
+            <button type="submit">
+                Cari
+            </button>
+
         </form>
 
         <table class="table-transaksi">
+
             <thead>
                 <tr>
                     <th>Nama</th>
@@ -27,14 +34,18 @@
             </thead>
 
             <tbody>
+
                 @foreach ($data as $item)
                     <tr
                         class="
-            {{ $item->status == 'dikembalikan' ? 'sudah-kembali' : '' }}
-            {{ $item->keterlambatan > 0 ? 'terlambat' : '' }}
-        ">
+                        {{ $item->status == 'dikembalikan' ? 'sudah-kembali' : '' }}
+                        {{ $item->keterlambatan > 0 ? 'terlambat' : '' }}
+                    ">
+
                         <td>{{ $item->anggota->nama ?? '-' }}</td>
+
                         <td>{{ $item->id_buku }}</td>
+
                         <td>{{ $item->buku->judul_buku }}</td>
 
                         <td>{{ $item->tanggal_pinjam }}</td>
@@ -42,11 +53,9 @@
                         <td>{{ $item->jatuh_tempo ?? '-' }}</td>
 
                         <td>
-
                             <span class="badge-durasi">
                                 {{ $item->durasi }} hari
                             </span>
-
                         </td>
 
                         <td>
@@ -57,36 +66,51 @@
 
                         <td class="aksi">
 
-                            @if ($item->status == 'menunggu')
-                                <form action="{{ route('peminjaman.konfirmasi', $item->id_peminjaman) }}" method="POST">
-                                    @csrf
-                                    <button class="btn-kembali">Konfirmasi</button>
-                                </form>
-                            @endif
-
                             @if ($item->status == 'dipinjam')
                                 <form action="{{ route('pengembalian.kembali', $item->id_peminjaman) }}" method="POST"
                                     style="display:inline;">
+
                                     @csrf
-                                    <button class="btn-kembali">Kembalikan</button>
+
+                                    <button class="btn-kembali">
+                                        Kembalikan
+                                    </button>
+
                                 </form>
                             @endif
 
-                            <a href="{{ route('peminjaman.show', $item->id_peminjaman) }}" class="btn-detail">Detail</a>
+                            <a href="{{ route('peminjaman.show', $item->id_peminjaman) }}" class="btn-detail">
 
-                            <a href="{{ route('peminjaman.edit', $item->id_peminjaman) }}" class="btn-edit">Edit</a>
+                                Detail
+
+                            </a>
+
+                            <a href="{{ route('peminjaman.edit', $item->id_peminjaman) }}" class="btn-edit">
+
+                                Edit
+
+                            </a>
 
                             <form action="{{ route('peminjaman.destroy', $item->id_peminjaman) }}" method="POST"
                                 style="display:inline;">
+
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn-delete">Hapus</button>
+
+                                <button class="btn-delete">
+                                    Hapus
+                                </button>
+
                             </form>
 
                         </td>
+
                     </tr>
                 @endforeach
+
             </tbody>
+
         </table>
+
     </div>
 @endsection

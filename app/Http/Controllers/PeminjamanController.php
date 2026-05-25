@@ -12,13 +12,13 @@ class PeminjamanController extends Controller
     public function index(Request $request)
     {
         $query = Peminjaman::with(['buku', 'anggota'])
-            ->whereIn('status', ['menunggu', 'dipinjam']);
+            ->where('status', 'dipinjam');
 
         if ($request->search) {
             $query->search($request->search);
         }
 
-        $data = $query->get();
+        $data = $query->latest()->get();
 
         return view('peminjaman.index', compact('data'));
     }
@@ -98,30 +98,17 @@ class PeminjamanController extends Controller
 
     public function destroy(string $id)
     {
-        Peminjaman::destroy($id);
-
-        return redirect()->route('peminjaman.index');
-    }
-
-    public function konfirmasi($id)
-    {
         $data = Peminjaman::findOrFail($id);
 
-        if ($data->status == 'menunggu') {
+        if ($data->status == 'dipinjam') {
 
             $buku = Buku::findOrFail($data->id_buku);
 
-            if ($buku->stok <= 0) {
-                return back()->with('error', 'Stok buku habis!');
-            }
-
-            $buku->decrement('stok');
-
-            $data->update([
-                'status' => 'dipinjam',
-            ]);
+            $buku->increment('stok');
         }
 
-        return back()->with('success', 'Peminjaman dikonfirmasi');
+        $data->delete();
+
+        return redirect()->route('peminjaman.index');
     }
 }

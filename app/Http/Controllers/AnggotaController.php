@@ -23,7 +23,9 @@ class AnggotaController extends Controller
      */
     public function create()
     {
-        return view('anggota.create');
+        $anggota = Anggota::whereNull('id_pengguna')->get();
+
+        return view('anggota.create', compact('anggota'));
     }
 
     /**
@@ -45,12 +47,23 @@ class AnggotaController extends Controller
             'role' => 'peminjam',
         ]);
 
-        Anggota::create([
-            'nama' => $request->nama,
-            'alamat' => $request->alamat,
-            'no_hp' => $request->no_hp,
-            'id_pengguna' => $pengguna->id_pengguna,
-        ]);
+        if ($request->id_anggota) {
+
+            $anggota = Anggota::findOrFail($request->id_anggota);
+
+            $anggota->update([
+                'id_pengguna' => $pengguna->id_pengguna,
+            ]);
+
+        } else {
+
+            Anggota::create([
+                'nama' => $request->nama,
+                'alamat' => $request->alamat,
+                'no_hp' => $request->no_hp,
+                'id_pengguna' => $pengguna->id_pengguna,
+            ]);
+        }
 
         return redirect()->route('anggota.index');
     }
@@ -84,9 +97,15 @@ class AnggotaController extends Controller
 
         $request->validate([
             'nama' => 'required',
-            'username' => 'required|unique:pengguna,username,'.$data->id_pengguna.',id_pengguna',
+
+            'username' => 'required|unique:pengguna,username,'.
+                ($data->id_pengguna ?? 'NULL').
+                ',id_pengguna',
+
             'password' => 'nullable|min:4',
+
             'alamat' => 'nullable',
+
             'no_hp' => 'nullable',
         ]);
 
@@ -96,16 +115,32 @@ class AnggotaController extends Controller
             'no_hp' => $request->no_hp,
         ]);
 
-        $pengguna = Pengguna::find($data->id_pengguna);
+        if (! $data->id_pengguna) {
 
-        if ($pengguna) {
-            $pengguna->username = $request->username;
+            $pengguna = Pengguna::create([
+                'username' => $request->username,
+                'password' => $request->password,
+                'role' => 'peminjam',
+            ]);
 
-            if ($request->password) {
-                $pengguna->password = $request->password;
+            $data->update([
+                'id_pengguna' => $pengguna->id_pengguna,
+            ]);
+
+        } else {
+
+            $pengguna = Pengguna::find($data->id_pengguna);
+
+            if ($pengguna) {
+
+                $pengguna->username = $request->username;
+
+                if ($request->password) {
+                    $pengguna->password = $request->password;
+                }
+
+                $pengguna->save();
             }
-
-            $pengguna->save();
         }
 
         return redirect()->route('anggota.index');

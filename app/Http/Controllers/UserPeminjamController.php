@@ -11,14 +11,15 @@ class UserPeminjamController extends Controller
     public function index()
     {
         return view('peminjam.buku', [
-            'buku' => Buku::all(),
+            'buku' => Buku::with(['kategori', 'rak'])->get(),
         ]);
     }
 
     public function show($id)
     {
         return view('peminjam.detail', [
-            'buku' => Buku::findOrFail($id),
+            'buku' => Buku::with(['kategori', 'rak'])
+                ->findOrFail($id),
         ]);
     }
 
@@ -30,25 +31,37 @@ class UserPeminjamController extends Controller
             return back()->with('error', 'Stok buku habis');
         }
 
-        $buku->stok -= 1;
-        $buku->save();
+        $buku->decrement('stok');
 
         Peminjaman::create([
             'id_buku' => $request->id_buku,
             'id_anggota' => session('id_anggota'),
             'tanggal_pinjam' => now(),
             'jatuh_tempo' => now()->addDays(3),
-            'status' => 'menunggu',
+            'status' => 'dipinjam',
         ]);
 
         return back()->with('success', 'Buku berhasil dipinjam');
     }
 
-    public function riwayat()
+    public function peminjaman()
     {
-        return view('peminjam.riwayat', [
+        return view('peminjam.peminjaman', [
             'data' => Peminjaman::with('buku')
                 ->where('id_anggota', session('id_anggota'))
+                ->where('status', 'dipinjam')
+                ->latest()
+                ->get(),
+        ]);
+    }
+
+    public function pengembalian()
+    {
+        return view('peminjam.pengembalian', [
+            'data' => Peminjaman::with('buku')
+                ->where('id_anggota', session('id_anggota'))
+                ->where('status', 'dikembalikan')
+                ->latest()
                 ->get(),
         ]);
     }

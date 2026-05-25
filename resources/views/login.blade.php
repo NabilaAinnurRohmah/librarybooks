@@ -9,29 +9,75 @@
 <body class="login-page">
 
     <div class="login-box">
-        <h1>📚 Perpustakaan</h1>
-        <p class="subtitle">Silakan login untuk melanjutkan</p>
+
+        <h1>
+            📚 Perpustakaan
+        </h1>
+
+        <p class="subtitle">
+            Silakan login untuk melanjutkan
+        </p>
 
         @if (session('error'))
-            <p class="error">{{ session('error') }}</p>
+            <p class="error">
+                {{ session('error') }}
+            </p>
+        @endif
+
+        @if (session('success'))
+            <p class="success">
+                {{ session('success') }}
+            </p>
         @endif
 
         <form method="POST" action="{{ route('login.process') }}">
+
             @csrf
 
             <div class="form-group">
-                <label>Username</label>
+
+                <label>
+                    Username
+                </label>
+
                 <input type="text" name="username" placeholder="Masukkan username" required>
+
             </div>
 
             <div class="form-group password-box">
-                <label>Password</label>
+
+                <label>
+                    Password
+                </label>
+
                 <input type="password" id="password" name="password" placeholder="Masukkan password" required>
-                <button type="button" onclick="showPassword()">👁</button>
+
+                <button type="button" onclick="showPassword()">
+                    👁
+                </button>
+
             </div>
 
-            <button type="submit" class="btn-login">Login</button>
+            <button type="submit" class="btn-login">
+                Login
+            </button>
+
         </form>
+
+        <div class="register-link">
+
+            <p>
+                Belum punya akun?
+            </p>
+
+            <a href="{{ route('register') }}" class="btn-register">
+
+                Register Anggota
+
+            </a>
+
+        </div>
+
     </div>
 
 </body>
@@ -40,7 +86,11 @@
 
 <script>
     function showPassword() {
+
         var x = document.getElementById("password");
-        x.type = (x.type === "password") ? "text" : "password";
+
+        x.type = (x.type === "password") ?
+            "text" :
+            "password";
     }
 </script>
