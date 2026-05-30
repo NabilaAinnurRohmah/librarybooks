@@ -3,17 +3,13 @@
 @section('content')
     <h2 class="page-title">Data Pengembalian</h2>
 
+    @if (session('success'))
+        <div class="alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <div class="card">
-
-        <form action="{{ route('pengembalian.index') }}" method="GET" class="search-box">
-
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama atau buku...">
-
-            <button type="submit">
-                Cari
-            </button>
-
-        </form>
 
         <table class="table-transaksi">
 
@@ -80,7 +76,7 @@
 
                         <td class="aksi">
 
-                            <form action="{{ route('peminjaman.destroy', $item->id_peminjaman) }}" method="POST"
+                            <form action="{{ route('pengembalian.destroy', $item->id_peminjaman) }}" method="POST"
                                 style="display:inline;">
 
                                 @csrf

@@ -6,10 +6,7 @@
     <a href="{{ route('kategori.create') }}" class="btn-add">+ Tambah Kategori</a>
 
     <div class="card">
-        <form action="{{ route('kategori.index') }}" method="GET" class="search-box">
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari kategori...">
-            <button type="submit">Cari</button>
-        </form>
+
         <table class="table-modern">
             <thead>
                 <tr>

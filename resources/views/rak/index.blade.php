@@ -9,12 +9,6 @@
 
     <div class="card">
 
-        <form action="{{ route('rak.index') }}" method="GET" class="search-box">
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari rak...">
-
-            <button type="submit">Cari</button>
-        </form>
-
         @if (session('success'))
             <div class="alert-success">
                 {{ session('success') }}
@@ -57,8 +51,7 @@
                                 Edit
                             </a>
 
-                            <form action="{{ route('rak.destroy', $item->id_rak) }}" method="POST"
-                                style="display:inline;">
+                            <form action="{{ route('rak.destroy', $item->id_rak) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
 

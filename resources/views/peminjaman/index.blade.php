@@ -5,18 +5,14 @@
 
     <a href="{{ route('peminjaman.create') }}" class="btn-add">+ Pinjam Buku</a>
 
+    @if (session('success'))
+        <div class="alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+
     <div class="card">
-
-        <form action="{{ route('peminjaman.index') }}" method="GET" class="search-box">
-
-            <input type="text" name="search" value="{{ request('search') }}"
-                placeholder="Cari nama, judul buku, kode buku....">
-
-            <button type="submit">
-                Cari
-            </button>
-
-        </form>
 
         <table class="table-transaksi">
 

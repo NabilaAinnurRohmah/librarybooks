@@ -34,24 +34,6 @@ class Peminjaman extends Model
         return $this->belongsTo(Buku::class, 'id_buku');
     }
 
-    public function scopeSearch($query, $search)
-    {
-        return $query->where(function ($q) use ($search) {
-
-            $q->whereHas('anggota', function ($q2) use ($search) {
-                $q2->where('nama', 'ilike', "%$search%");
-            })
-                ->orWhere('id_buku', 'ilike', "%$search%")
-                ->orWhere('status', 'ilike', "%$search%")
-                ->orWhereRaw('CAST(tanggal_pinjam AS TEXT) ILIKE ?', ["%$search%"])
-                ->orWhereRaw('CAST(jatuh_tempo AS TEXT) ILIKE ?', ["%$search%"])
-                ->orWhereRaw('CAST(tanggal_kembali AS TEXT) ILIKE ?', ["%$search%"])
-                ->orWhereHas('buku', function ($q2) use ($search) {
-                    $q2->where('judul_buku', 'ilike', "%$search%");
-                });
-        });
-    }
-
     public function prosesPengembalian()
     {
         if ($this->status == 'dikembalikan') {

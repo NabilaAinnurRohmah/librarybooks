@@ -304,6 +304,19 @@ body {
     color: #888;
 }
 
+/* ALERT ANGGOTA*/
+.alert-success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+}
+
 /* INDEX BUKU & KATEGORI*/
 .page-title {
     margin-bottom: 15px;
@@ -422,6 +435,20 @@ body {
 
 .btn-delete:hover {
     background: #c0392b;
+}
+
+.btn-cetak {
+    background: #16a085;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 12px;
+    transition: 0.3s;
+}
+
+.btn-cetak:hover {
+    background: #138d75;
 }
 
 /* CREATE DAN EDIT BUKU & KATEGORI */

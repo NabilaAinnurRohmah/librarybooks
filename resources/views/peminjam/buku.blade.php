@@ -5,6 +5,23 @@
         📚 Daftar Buku
     </h2>
 
+    @if (session('success'))
+        <div class="alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    <form action="{{ route('peminjam.buku') }}" method="GET" class="search-box">
+
+        <input type="text" name="search" value="{{ request('search') }}"
+            placeholder="Cari judul buku, pengarang, kategori....">
+
+        <button type="submit">
+            Cari
+        </button>
+
+    </form>
+
     <div class="buku-grid">
 
         @foreach ($buku as $b)

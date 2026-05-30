@@ -9,16 +9,12 @@ use Illuminate\Http\Request;
 
 class PeminjamanController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $query = Peminjaman::with(['buku', 'anggota'])
-            ->where('status', 'dipinjam');
-
-        if ($request->search) {
-            $query->search($request->search);
-        }
-
-        $data = $query->latest()->get();
+        $data = Peminjaman::with(['buku', 'anggota'])
+            ->where('status', 'dipinjam')
+            ->latest()
+            ->get();
 
         return view('peminjaman.index', compact('data'));
     }
@@ -109,6 +105,8 @@ class PeminjamanController extends Controller
 
         $data->delete();
 
-        return redirect()->route('peminjaman.index');
+        return redirect()
+            ->route('peminjaman.index')
+            ->with('success', 'Data peminjaman berhasil dihapus');
     }
 }

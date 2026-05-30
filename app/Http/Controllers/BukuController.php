@@ -12,14 +12,9 @@ class BukuController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $buku = Buku::with(['kategori', 'rak']);
-        if ($request->search) {
-            $buku->search($request->search);
-        }
-
-        $buku = $buku->get();
+        $buku = Buku::with(['kategori', 'rak'])->get();
 
         return view('buku.index', compact('buku'));
     }

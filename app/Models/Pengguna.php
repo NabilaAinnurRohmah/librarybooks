@@ -21,8 +21,22 @@ class Pengguna extends Model
 
     public static function cekLogin($username, $password)
     {
-        return self::where('username', $username)
-            ->where('password', $password)
-            ->first();
+        $user = self::where(
+            'username',
+            $username
+        )->first();
+
+        if (! $user) {
+            return null;
+        }
+
+        $passwordDb =
+            \App\Helpers\XorCipher::decrypt(
+                $user->password
+            );
+
+        return $passwordDb === $password
+            ? $user
+            : null;
     }
 }

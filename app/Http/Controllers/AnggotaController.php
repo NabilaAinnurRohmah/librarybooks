@@ -2,25 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\XorCipher;
 use App\Models\Anggota;
 use App\Models\Pengguna;
 use Illuminate\Http\Request;
 
 class AnggotaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    private function decryptAnggota($anggota)
+    {
+        if (! $anggota) {
+            return $anggota;
+        }
+
+        if (! empty($anggota->alamat)) {
+            $anggota->alamat = XorCipher::decrypt($anggota->alamat);
+        }
+
+        return $anggota;
+    }
+
     public function index()
     {
         $data = Anggota::all();
 
+        foreach ($data as $anggota) {
+            $this->decryptAnggota($anggota);
+        }
+
         return view('anggota.index', compact('data'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $anggota = Anggota::whereNull('id_pengguna')->get();
@@ -28,9 +40,6 @@ class AnggotaController extends Controller
         return view('anggota.create', compact('anggota'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -43,7 +52,7 @@ class AnggotaController extends Controller
 
         $pengguna = Pengguna::create([
             'username' => $request->username,
-            'password' => $request->password,
+            'password' => XorCipher::encrypt($request->password),
             'role' => 'peminjam',
         ]);
 
@@ -59,8 +68,13 @@ class AnggotaController extends Controller
 
             Anggota::create([
                 'nama' => $request->nama,
-                'alamat' => $request->alamat,
+
+                'alamat' => $request->alamat
+                    ? XorCipher::encrypt($request->alamat)
+                    : null,
+
                 'no_hp' => $request->no_hp,
+
                 'id_pengguna' => $pengguna->id_pengguna,
             ]);
         }
@@ -68,50 +82,44 @@ class AnggotaController extends Controller
         return redirect()->route('anggota.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $data = Anggota::findOrFail($id);
 
+        $this->decryptAnggota($data);
+
         return view('anggota.show', compact('data'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         $data = Anggota::findOrFail($id);
 
+        $this->decryptAnggota($data);
+
         return view('anggota.edit', compact('data'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $data = Anggota::findOrFail($id);
 
         $request->validate([
             'nama' => 'required',
-
             'username' => 'required|unique:pengguna,username,'.
-                ($data->id_pengguna ?? 'NULL').
-                ',id_pengguna',
-
+                ($data->id_pengguna ?? 'NULL').',id_pengguna',
             'password' => 'nullable|min:4',
-
             'alamat' => 'nullable',
-
             'no_hp' => 'nullable',
         ]);
 
         $data->update([
             'nama' => $request->nama,
-            'alamat' => $request->alamat,
+
+            'alamat' => $request->alamat
+                ? XorCipher::encrypt($request->alamat)
+                : null,
+
             'no_hp' => $request->no_hp,
         ]);
 
@@ -119,7 +127,7 @@ class AnggotaController extends Controller
 
             $pengguna = Pengguna::create([
                 'username' => $request->username,
-                'password' => $request->password,
+                'password' => XorCipher::encrypt($request->password),
                 'role' => 'peminjam',
             ]);
 
@@ -136,7 +144,7 @@ class AnggotaController extends Controller
                 $pengguna->username = $request->username;
 
                 if ($request->password) {
-                    $pengguna->password = $request->password;
+                    $pengguna->password = XorCipher::encrypt($request->password);
                 }
 
                 $pengguna->save();
@@ -146,13 +154,19 @@ class AnggotaController extends Controller
         return redirect()->route('anggota.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         Anggota::destroy($id);
 
         return redirect()->route('anggota.index');
+    }
+
+    public function cetakKartu($id)
+    {
+        $anggota = Anggota::findOrFail($id);
+
+        return redirect()
+            ->route('anggota.index')
+            ->with('success', 'Kartu anggota '.$anggota->nama.' berhasil dicetak.');
     }
 }

@@ -8,11 +8,13 @@ use Illuminate\Http\Request;
 
 class UserPeminjamController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('peminjam.buku', [
-            'buku' => Buku::with(['kategori', 'rak'])->get(),
-        ]);
+        $buku = Buku::with(['kategori', 'rak'])
+            ->search($request->search)
+            ->get();
+
+        return view('peminjam.buku', compact('buku'));
     }
 
     public function show($id)

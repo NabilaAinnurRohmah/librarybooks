@@ -9,6 +9,12 @@
         + Tambah Anggota
     </a>
 
+    @if (session('success'))
+        <div class="alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <div class="card">
 
         <table class="table-modern">
@@ -66,6 +72,12 @@
 
                                     Buat Akun
 
+                                </a>
+                            @endif
+
+                            @if ($a->id_pengguna)
+                                <a href="{{ route('anggota.cetak-kartu', $a->id_anggota) }}" class="btn-cetak">
+                                    Cetak Kartu
                                 </a>
                             @endif
 

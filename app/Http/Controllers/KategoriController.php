@@ -10,15 +10,9 @@ class KategoriController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $kategori = Kategori::query();
-
-        if ($request->search) {
-            $kategori->search($request->search);
-        }
-
-        $kategori = $kategori->get();
+        $kategori = Kategori::all();
 
         return view('kategori.index', compact('kategori'));
     }

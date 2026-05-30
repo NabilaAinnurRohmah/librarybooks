@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\XorCipher;
 use App\Models\Anggota;
 use Illuminate\Http\Request;
 
@@ -22,12 +23,17 @@ class RegisterController extends Controller
 
         Anggota::create([
             'nama' => $request->nama,
-            'alamat' => $request->alamat,
+
+            'alamat' => $request->alamat
+                ? XorCipher::encrypt($request->alamat)
+                : null,
+
             'no_hp' => $request->no_hp,
+
             'id_pengguna' => null,
         ]);
 
         return redirect()->route('login')
-            ->with('success', 'Pendaftaran berhasil, Silahkan mendatangi petugas untuk mendapatkan akun');
+            ->with('success', 'Pendaftaran berhasil, silahkan mendatangi petugas untuk mendapatkan akun');
     }
 }

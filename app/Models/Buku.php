@@ -30,11 +30,18 @@ class Buku extends Model
     public function scopeSearch($query, $search)
     {
         return $query->where(function ($q) use ($search) {
+
             $q->where('judul_buku', 'ilike', "%$search%")
                 ->orWhere('pengarang', 'ilike', "%$search%")
+
                 ->orWhereHas('kategori', function ($q2) use ($search) {
                     $q2->where('nama_kategori', 'ilike', "%$search%");
+                })
+
+                ->orWhereHas('rak', function ($q2) use ($search) {
+                    $q2->where('nama_rak', 'ilike', "%$search%");
                 });
+
         });
     }
 }

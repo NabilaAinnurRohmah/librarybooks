@@ -10,15 +10,9 @@ class RakController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $rak = Rak::with('buku');
-
-        if ($request->search) {
-            $rak->search($request->search);
-        }
-
-        $rak = $rak->get();
+        $rak = Rak::with('buku')->get();
 
         return view('rak.index', compact('rak'));
     }
