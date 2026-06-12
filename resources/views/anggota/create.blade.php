@@ -2,8 +2,12 @@
 
 @section('content')
     <h2 class="page-title">Tambah Anggota</h2>
-
     <div class="form-card">
+        @error('username')
+            <div class="text-danger">
+                {{ $message }}
+            </div>
+        @enderror
         <form action="{{ route('anggota.store') }}" method="POST">
             @csrf
 

@@ -33,6 +33,8 @@ class RegisterController extends Controller
             'no_hp' => $request->no_hp,
 
             'id_pengguna' => null,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         return redirect()

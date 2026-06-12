@@ -41,12 +41,15 @@ class AnggotaController extends Controller
 
     public function store(Request $request)
     {
+
         $request->validate([
             'nama' => 'required',
             'username' => 'required|unique:pengguna,username',
             'password' => 'required|min:4',
             'alamat' => 'nullable',
             'no_hp' => 'nullable',
+        ], [
+            'username.unique' => 'Username sudah digunakan.',
         ]);
 
         $id_pengguna = Pengguna::insertData([
@@ -77,6 +80,7 @@ class AnggotaController extends Controller
 
                 'id_pengguna' => $id_pengguna,
             ]);
+
         }
 
         return redirect()->route('anggota.index');

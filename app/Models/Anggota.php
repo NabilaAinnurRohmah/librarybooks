@@ -48,6 +48,9 @@ class Anggota extends Model
 
     public static function insertData($data)
     {
+        $data['created_at'] = now();
+        $data['updated_at'] = now();
+
         return DB::table('anggota')
             ->insert($data);
     }

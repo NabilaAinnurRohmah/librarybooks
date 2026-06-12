@@ -317,6 +317,16 @@ body {
     text-align: center;
 }
 
+.text-danger {
+    background: #ffe5e5;
+    color: #cc0000;
+    padding: 10px;
+    border-radius: 6px;
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
 /* INDEX BUKU & KATEGORI*/
 .page-title {
     margin-bottom: 15px;
@@ -745,16 +755,6 @@ body {
     background: #c0392b;
     color: white;
     font-weight: bold;
-}
-
-.text-danger {
-    color: #e74c3c;
-    font-weight: 600;
-}
-
-.text-success {
-    color: #2ecc71;
-    font-weight: 600;
 }
 
 .btn-kembali {

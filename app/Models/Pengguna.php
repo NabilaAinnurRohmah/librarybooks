@@ -202,8 +202,12 @@ class Pengguna extends Model
 
     public static function insertData($data)
     {
+        $data['created_at'] = now();
+        $data['updated_at'] = now();
+
         return DB::table('pengguna')
-            ->insertGetId($data);
+            ->insertGetId($data, 'id_pengguna');
+
     }
 
     public static function updateData($id, $data)
