@@ -8,32 +8,62 @@ class PengembalianController extends Controller
 {
     public function index()
     {
-        $data = Peminjaman::with(['buku', 'anggota'])
-            ->where('status', 'dikembalikan')
-            ->get();
+        $data = Peminjaman::getAllDikembalikan();
 
-        return view('pengembalian.index', compact('data'));
+        foreach ($data as $item) {
+
+            $item->durasi =
+                Peminjaman::getDurasi($item);
+
+            $item->keterlambatan =
+                Peminjaman::getKeterlambatan($item);
+        }
+
+        return view(
+            'pengembalian.index',
+            compact('data')
+        );
     }
 
     public function kembali($id)
     {
-        $data = Peminjaman::with('buku')->findOrFail($id);
+        $hasil = Peminjaman::prosesPengembalian(
+            $id
+        );
 
-        $data->prosesPengembalian();
+        if (! $hasil) {
+
+            return redirect()
+                ->route('pengembalian.index')
+                ->with(
+                    'error',
+                    'Data tidak ditemukan'
+                );
+        }
 
         return redirect()
             ->route('pengembalian.index')
-            ->with('success', 'Buku berhasil dikembalikan');
+            ->with(
+                'success',
+                'Buku berhasil dikembalikan'
+            );
     }
 
     public function destroy($id)
     {
-        $data = Peminjaman::findOrFail($id);
+        $data = Peminjaman::getById($id);
 
-        $data->delete();
+        if (! $data) {
+            abort(404);
+        }
+
+        Peminjaman::deleteData($id);
 
         return redirect()
             ->route('pengembalian.index')
-            ->with('success', 'Data pengembalian berhasil dihapus');
+            ->with(
+                'success',
+                'Data pengembalian berhasil dihapus'
+            );
     }
 }

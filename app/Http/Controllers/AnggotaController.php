@@ -2,42 +2,41 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\XorCipher;
 use App\Models\Anggota;
 use App\Models\Pengguna;
 use Illuminate\Http\Request;
 
 class AnggotaController extends Controller
 {
-    private function decryptAnggota($anggota)
-    {
-        if (! $anggota) {
-            return $anggota;
-        }
-
-        if (! empty($anggota->alamat)) {
-            $anggota->alamat = XorCipher::decrypt($anggota->alamat);
-        }
-
-        return $anggota;
-    }
-
     public function index()
     {
-        $data = Anggota::all();
+        $data = Anggota::getAll();
 
         foreach ($data as $anggota) {
-            $this->decryptAnggota($anggota);
+
+            if (! empty($anggota->alamat)) {
+
+                $anggota->alamat =
+                    Pengguna::decrypt(
+                        $anggota->alamat
+                    );
+            }
         }
 
-        return view('anggota.index', compact('data'));
+        return view(
+            'anggota.index',
+            compact('data')
+        );
     }
 
     public function create()
     {
-        $anggota = Anggota::whereNull('id_pengguna')->get();
+        $anggota = Anggota::getWithoutPengguna();
 
-        return view('anggota.create', compact('anggota'));
+        return view(
+            'anggota.create',
+            compact('anggota')
+        );
     }
 
     public function store(Request $request)
@@ -50,32 +49,33 @@ class AnggotaController extends Controller
             'no_hp' => 'nullable',
         ]);
 
-        $pengguna = Pengguna::create([
+        $id_pengguna = Pengguna::insertData([
             'username' => $request->username,
-            'password' => XorCipher::encrypt($request->password),
+            'password' => Pengguna::encrypt($request->password),
             'role' => 'peminjam',
         ]);
 
         if ($request->id_anggota) {
 
-            $anggota = Anggota::findOrFail($request->id_anggota);
-
-            $anggota->update([
-                'id_pengguna' => $pengguna->id_pengguna,
-            ]);
+            Anggota::updateData(
+                $request->id_anggota,
+                [
+                    'id_pengguna' => $id_pengguna,
+                ]
+            );
 
         } else {
 
-            Anggota::create([
+            Anggota::insertData([
                 'nama' => $request->nama,
 
                 'alamat' => $request->alamat
-                    ? XorCipher::encrypt($request->alamat)
+                    ? Pengguna::encrypt($request->alamat)
                     : null,
 
                 'no_hp' => $request->no_hp,
 
-                'id_pengguna' => $pengguna->id_pengguna,
+                'id_pengguna' => $id_pengguna,
             ]);
         }
 
@@ -84,40 +84,71 @@ class AnggotaController extends Controller
 
     public function show(string $id)
     {
-        $data = Anggota::findOrFail($id);
+        $data = Anggota::getById($id);
 
-        $this->decryptAnggota($data);
+        if (! $data) {
+            abort(404);
+        }
 
-        return view('anggota.show', compact('data'));
+        if (! empty($data->alamat)) {
+
+            $data->alamat =
+                Pengguna::decrypt(
+                    $data->alamat
+                );
+        }
+
+        return view(
+            'anggota.show',
+            compact('data')
+        );
     }
 
     public function edit(string $id)
     {
-        $data = Anggota::findOrFail($id);
+        $data = Anggota::getById($id);
 
-        $this->decryptAnggota($data);
+        if (! $data) {
+            abort(404);
+        }
 
-        return view('anggota.edit', compact('data'));
+        if (! empty($data->alamat)) {
+
+            $data->alamat =
+                Pengguna::decrypt(
+                    $data->alamat
+                );
+        }
+
+        return view(
+            'anggota.edit',
+            compact('data')
+        );
     }
 
     public function update(Request $request, string $id)
     {
-        $data = Anggota::findOrFail($id);
+        $data = Anggota::getById($id);
+
+        if (! $data) {
+            abort(404);
+        }
 
         $request->validate([
             'nama' => 'required',
             'username' => 'required|unique:pengguna,username,'.
-                ($data->id_pengguna ?? 'NULL').',id_pengguna',
+                ($data->id_pengguna ?? 'NULL').
+                ',id_pengguna',
             'password' => 'nullable|min:4',
             'alamat' => 'nullable',
             'no_hp' => 'nullable',
         ]);
 
-        $data->update([
+        Anggota::updateData($id, [
             'nama' => $request->nama,
 
             'alamat' => $request->alamat
-                ? XorCipher::encrypt($request->alamat)
+                ? Pengguna::encrypt($request->alamat)
                 : null,
 
             'no_hp' => $request->no_hp,
@@ -125,29 +156,40 @@ class AnggotaController extends Controller
 
         if (! $data->id_pengguna) {
 
-            $pengguna = Pengguna::create([
+            $id_pengguna = Pengguna::insertData([
                 'username' => $request->username,
-                'password' => XorCipher::encrypt($request->password),
+                'password' => Pengguna::encrypt($request->password),
                 'role' => 'peminjam',
             ]);
 
-            $data->update([
-                'id_pengguna' => $pengguna->id_pengguna,
+            Anggota::updateData($id, [
+                'id_pengguna' => $id_pengguna,
             ]);
 
         } else {
 
-            $pengguna = Pengguna::find($data->id_pengguna);
+            $pengguna = Pengguna::getById(
+                $data->id_pengguna
+            );
 
             if ($pengguna) {
 
-                $pengguna->username = $request->username;
+                $updateData = [
+                    'username' => $request->username,
+                ];
 
                 if ($request->password) {
-                    $pengguna->password = XorCipher::encrypt($request->password);
+
+                    $updateData['password'] =
+                        Pengguna::encrypt(
+                            $request->password
+                        );
                 }
 
-                $pengguna->save();
+                Pengguna::updateData(
+                    $data->id_pengguna,
+                    $updateData
+                );
             }
         }
 
@@ -156,17 +198,26 @@ class AnggotaController extends Controller
 
     public function destroy(string $id)
     {
-        Anggota::destroy($id);
+        Anggota::deleteData($id);
 
         return redirect()->route('anggota.index');
     }
 
     public function cetakKartu($id)
     {
-        $anggota = Anggota::findOrFail($id);
+        $anggota = Anggota::getById($id);
+
+        if (! $anggota) {
+            abort(404);
+        }
 
         return redirect()
             ->route('anggota.index')
-            ->with('success', 'Kartu anggota '.$anggota->nama.' berhasil dicetak.');
+            ->with(
+                'success',
+                'Kartu anggota '.
+                $anggota->nama.
+                ' berhasil dicetak.'
+            );
     }
 }

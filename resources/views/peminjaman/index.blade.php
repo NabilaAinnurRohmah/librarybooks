@@ -38,11 +38,11 @@
                         {{ $item->keterlambatan > 0 ? 'terlambat' : '' }}
                     ">
 
-                        <td>{{ $item->anggota->nama ?? '-' }}</td>
+                        <td>{{ $item->nama ?? '-' }}</td>
 
                         <td>{{ $item->id_buku }}</td>
 
-                        <td>{{ $item->buku->judul_buku }}</td>
+                        <td>{{ $item->judul_buku }}</td>
 
                         <td>{{ $item->tanggal_pinjam }}</td>
 

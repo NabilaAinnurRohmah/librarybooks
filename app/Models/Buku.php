@@ -2,46 +2,179 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Buku extends Model
 {
-    use HasFactory;
-
     protected $table = 'buku';
-
-    protected $fillable = ['judul_buku', 'pengarang', 'tahun_terbit', 'penerbit', 'sinopsis', 'stok', 'id_kategori', 'id_rak'];
 
     protected $primaryKey = 'id_buku';
 
-    public function kategori()
+    public static function getAll()
     {
-
-        return $this->belongsTo(Kategori::class, 'id_kategori');
-
+        return DB::table('buku')
+            ->leftJoin(
+                'kategori_buku',
+                'buku.id_kategori',
+                '=',
+                'kategori_buku.id_kategori'
+            )
+            ->leftJoin(
+                'rak',
+                'buku.id_rak',
+                '=',
+                'rak.id_rak'
+            )
+            ->select(
+                'buku.*',
+                'kategori_buku.nama_kategori',
+                'rak.nama_rak'
+            )
+            ->get();
     }
 
-    public function rak()
+    public static function getById($id)
     {
-        return $this->belongsTo(Rak::class, 'id_rak');
+        return DB::table('buku')
+            ->leftJoin(
+                'kategori_buku',
+                'buku.id_kategori',
+                '=',
+                'kategori_buku.id_kategori'
+            )
+            ->leftJoin(
+                'rak',
+                'buku.id_rak',
+                '=',
+                'rak.id_rak'
+            )
+            ->select(
+                'buku.*',
+                'kategori_buku.nama_kategori',
+                'rak.nama_rak'
+            )
+            ->where('id_buku', $id)
+            ->first();
     }
 
-    public function scopeSearch($query, $search)
+    public static function insertData($data)
     {
-        return $query->where(function ($q) use ($search) {
+        return DB::table('buku')->insert($data);
+    }
 
-            $q->where('judul_buku', 'ilike', "%$search%")
-                ->orWhere('pengarang', 'ilike', "%$search%")
+    public static function updateData($id, $data)
+    {
+        return DB::table('buku')
+            ->where('id_buku', $id)
+            ->update($data);
+    }
 
-                ->orWhereHas('kategori', function ($q2) use ($search) {
-                    $q2->where('nama_kategori', 'ilike', "%$search%");
-                })
+    public static function deleteData($id)
+    {
+        return DB::table('buku')
+            ->where('id_buku', $id)
+            ->delete();
+    }
 
-                ->orWhereHas('rak', function ($q2) use ($search) {
-                    $q2->where('nama_rak', 'ilike', "%$search%");
-                });
+    public static function search($search)
+    {
+        return DB::table('buku')
+            ->leftJoin(
+                'kategori_buku',
+                'buku.id_kategori',
+                '=',
+                'kategori_buku.id_kategori'
+            )
+            ->leftJoin(
+                'rak',
+                'buku.id_rak',
+                '=',
+                'rak.id_rak'
+            )
+            ->where(function ($q) use ($search) {
 
-        });
+                $q->where(
+                    'judul_buku',
+                    'ilike',
+                    "%{$search}%"
+                )
+                    ->orWhere(
+                        'pengarang',
+                        'ilike',
+                        "%{$search}%"
+                    )
+                    ->orWhere(
+                        'nama_kategori',
+                        'ilike',
+                        "%{$search}%"
+                    )
+                    ->orWhere(
+                        'nama_rak',
+                        'ilike',
+                        "%{$search}%"
+                    );
+            })
+            ->select(
+                'buku.*',
+                'kategori_buku.nama_kategori',
+                'rak.nama_rak'
+            )
+            ->get();
+    }
+
+    public static function getByRak($id_rak)
+    {
+        return DB::table('buku')
+            ->leftJoin(
+                'kategori_buku',
+                'buku.id_kategori',
+                '=',
+                'kategori_buku.id_kategori'
+            )
+            ->select(
+                'buku.*',
+                'kategori_buku.nama_kategori'
+            )
+            ->where('buku.id_rak', $id_rak)
+            ->get();
+    }
+
+    public static function kurangiStok($id)
+    {
+        return DB::table('buku')
+            ->where('id_buku', $id)
+            ->decrement('stok');
+    }
+
+    public static function tambahStok($id)
+    {
+        return DB::table('buku')
+            ->where('id_buku', $id)
+            ->increment('stok');
+    }
+
+    public static function countData()
+    {
+        return DB::table('buku')
+            ->count();
+    }
+
+    public static function getLatest($limit = 5)
+    {
+        return DB::table('buku')
+            ->leftJoin(
+                'kategori_buku',
+                'buku.id_kategori',
+                '=',
+                'kategori_buku.id_kategori'
+            )
+            ->select(
+                'buku.*',
+                'kategori_buku.nama_kategori'
+            )
+            ->orderByDesc('buku.id_buku')
+            ->limit($limit)
+            ->get();
     }
 }

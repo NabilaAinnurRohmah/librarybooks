@@ -11,20 +11,36 @@ class PeminjamanController extends Controller
 {
     public function index()
     {
-        $data = Peminjaman::with(['buku', 'anggota'])
-            ->where('status', 'dipinjam')
-            ->latest()
-            ->get();
+        $data = Peminjaman::getAllDipinjam();
 
-        return view('peminjaman.index', compact('data'));
+        foreach ($data as $item) {
+
+            $item->durasi =
+                Peminjaman::getDurasi($item);
+
+            $item->keterlambatan =
+                Peminjaman::getKeterlambatan($item);
+        }
+
+        return view(
+            'peminjaman.index',
+            compact('data')
+        );
     }
 
     public function create()
     {
-        $anggota = Anggota::all();
-        $buku = Buku::all();
+        $anggota = Anggota::getAll();
 
-        return view('peminjaman.create', compact('anggota', 'buku'));
+        $buku = Buku::getAll();
+
+        return view(
+            'peminjaman.create',
+            compact(
+                'anggota',
+                'buku'
+            )
+        );
     }
 
     public function store(Request $request)
@@ -36,15 +52,23 @@ class PeminjamanController extends Controller
             'jatuh_tempo' => 'required|date|after_or_equal:tanggal_pinjam',
         ]);
 
-        $buku = Buku::findOrFail($request->id_buku);
+        $buku = Buku::getById(
+            $request->id_buku
+        );
 
         if ($buku->stok <= 0) {
-            return back()->with('error', 'Stok buku habis!');
+
+            return back()->with(
+                'error',
+                'Stok buku habis!'
+            );
         }
 
-        $buku->decrement('stok');
+        Buku::kurangiStok(
+            $request->id_buku
+        );
 
-        Peminjaman::create([
+        Peminjaman::insertData([
             'id_anggota' => $request->id_anggota,
             'id_buku' => $request->id_buku,
             'tanggal_pinjam' => $request->tanggal_pinjam,
@@ -52,29 +76,56 @@ class PeminjamanController extends Controller
             'status' => 'dipinjam',
         ]);
 
-        return redirect()->route('peminjaman.index');
+        return redirect()
+            ->route('peminjaman.index');
     }
 
     public function show(string $id)
     {
-        $data = Peminjaman::with(['buku', 'anggota'])->findOrFail($id);
+        $data = Peminjaman::getById($id);
 
-        return view('peminjaman.show', compact('data'));
+        if (! $data) {
+            abort(404);
+        }
+
+        $data->durasi =
+            Peminjaman::getDurasi($data);
+
+        $data->keterlambatan =
+            Peminjaman::getKeterlambatan($data);
+
+        return view(
+            'peminjaman.show',
+            compact('data')
+        );
     }
 
     public function edit(string $id)
     {
-        $data = Peminjaman::findOrFail($id);
-        $anggota = Anggota::all();
-        $buku = Buku::all();
+        $data = Peminjaman::getById($id);
 
-        return view('peminjaman.edit', compact('data', 'anggota', 'buku'));
+        if (! $data) {
+            abort(404);
+        }
+
+        $anggota = Anggota::getAll();
+
+        $buku = Buku::getAll();
+
+        return view(
+            'peminjaman.edit',
+            compact(
+                'data',
+                'anggota',
+                'buku'
+            )
+        );
     }
 
-    public function update(Request $request, string $id)
-    {
-        $data = Peminjaman::findOrFail($id);
-
+    public function update(
+        Request $request,
+        string $id
+    ) {
         $request->validate([
             'id_anggota' => 'required',
             'id_buku' => 'required',
@@ -82,31 +133,42 @@ class PeminjamanController extends Controller
             'jatuh_tempo' => 'required|date|after_or_equal:tanggal_pinjam',
         ]);
 
-        $data->update([
-            'id_anggota' => $request->id_anggota,
-            'id_buku' => $request->id_buku,
-            'tanggal_pinjam' => $request->tanggal_pinjam,
-            'jatuh_tempo' => $request->jatuh_tempo,
-        ]);
+        Peminjaman::updateData(
+            $id,
+            [
+                'id_anggota' => $request->id_anggota,
+                'id_buku' => $request->id_buku,
+                'tanggal_pinjam' => $request->tanggal_pinjam,
+                'jatuh_tempo' => $request->jatuh_tempo,
+            ]
+        );
 
-        return redirect()->route('peminjaman.index');
+        return redirect()
+            ->route('peminjaman.index');
     }
 
     public function destroy(string $id)
     {
-        $data = Peminjaman::findOrFail($id);
+        $data = Peminjaman::getById($id);
+
+        if (! $data) {
+            abort(404);
+        }
 
         if ($data->status == 'dipinjam') {
 
-            $buku = Buku::findOrFail($data->id_buku);
-
-            $buku->increment('stok');
+            Buku::tambahStok(
+                $data->id_buku
+            );
         }
 
-        $data->delete();
+        Peminjaman::deleteData($id);
 
         return redirect()
             ->route('peminjaman.index')
-            ->with('success', 'Data peminjaman berhasil dihapus');
+            ->with(
+                'success',
+                'Data peminjaman berhasil dihapus'
+            );
     }
 }

@@ -11,7 +11,7 @@
 
         <div class="detail-row">
             <div class="label">Username</div>
-            <div class="value">{{ $data->pengguna->username ?? '-' }}</div>
+            <div class="value">{{ $data->username ?? '-' }}</div>
         </div>
 
         <div class="detail-row">

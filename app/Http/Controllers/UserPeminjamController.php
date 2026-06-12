@@ -10,32 +10,60 @@ class UserPeminjamController extends Controller
 {
     public function index(Request $request)
     {
-        $buku = Buku::with(['kategori', 'rak'])
-            ->search($request->search)
-            ->get();
+        if ($request->search) {
 
-        return view('peminjam.buku', compact('buku'));
+            $buku = Buku::search(
+                $request->search
+            );
+
+        } else {
+
+            $buku = Buku::getAll();
+        }
+
+        return view(
+            'peminjam.buku',
+            compact('buku')
+        );
     }
 
     public function show($id)
     {
-        return view('peminjam.detail', [
-            'buku' => Buku::with(['kategori', 'rak'])
-                ->findOrFail($id),
-        ]);
+        $buku = Buku::getById($id);
+
+        if (! $buku) {
+            abort(404);
+        }
+
+        return view(
+            'peminjam.detail',
+            compact('buku')
+        );
     }
 
     public function store(Request $request)
     {
-        $buku = Buku::findOrFail($request->id_buku);
+        $buku = Buku::getById(
+            $request->id_buku
+        );
 
-        if ($buku->stok <= 0) {
-            return back()->with('error', 'Stok buku habis');
+        if (! $buku) {
+            abort(404);
         }
 
-        $buku->decrement('stok');
+        if ($buku->stok <= 0) {
 
-        Peminjaman::create([
+            return back()->with(
+                'error',
+                'Stok buku habis'
+            );
+        }
+
+        Buku::kurangiStok(
+            $request->id_buku
+        );
+
+        Peminjaman::insertData([
             'id_buku' => $request->id_buku,
             'id_anggota' => session('id_anggota'),
             'tanggal_pinjam' => now(),
@@ -43,28 +71,51 @@ class UserPeminjamController extends Controller
             'status' => 'dipinjam',
         ]);
 
-        return back()->with('success', 'Buku berhasil dipinjam');
+        return back()->with(
+            'success',
+            'Buku berhasil dipinjam'
+        );
     }
 
     public function peminjaman()
     {
-        return view('peminjam.peminjaman', [
-            'data' => Peminjaman::with('buku')
-                ->where('id_anggota', session('id_anggota'))
-                ->where('status', 'dipinjam')
-                ->latest()
-                ->get(),
-        ]);
+        $data = Peminjaman::getByAnggotaDipinjam(
+            session('id_anggota')
+        );
+
+        foreach ($data as $item) {
+
+            $item->durasi =
+                Peminjaman::getDurasi($item);
+
+            $item->keterlambatan =
+                Peminjaman::getKeterlambatan($item);
+        }
+
+        return view(
+            'peminjam.peminjaman',
+            compact('data')
+        );
     }
 
     public function pengembalian()
     {
-        return view('peminjam.pengembalian', [
-            'data' => Peminjaman::with('buku')
-                ->where('id_anggota', session('id_anggota'))
-                ->where('status', 'dikembalikan')
-                ->latest()
-                ->get(),
-        ]);
+        $data = Peminjaman::getByAnggotaDikembalikan(
+            session('id_anggota')
+        );
+
+        foreach ($data as $item) {
+
+            $item->durasi =
+                Peminjaman::getDurasi($item);
+
+            $item->keterlambatan =
+                Peminjaman::getKeterlambatan($item);
+        }
+
+        return view(
+            'peminjam.pengembalian',
+            compact('data')
+        );
     }
 }

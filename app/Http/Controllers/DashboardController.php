@@ -11,13 +11,19 @@ class DashboardController extends Controller
     public function index()
     {
         return view('dashboard', [
-            'totalBuku' => Buku::count(),
-            'totalKategori' => Kategori::count(),
+            'totalBuku' => Buku::countData(),
 
-            'totalDipinjam' => Peminjaman::where('status', 'dipinjam')->count(),
-            'totalDikembalikan' => Peminjaman::where('status', 'dikembalikan')->count(),
+            'totalKategori' => Kategori::countData(),
 
-            'bukuTerbaru' => Buku::latest()->take(5)->get(),
+            'totalDipinjam' => Peminjaman::countByStatus(
+                'dipinjam'
+            ),
+
+            'totalDikembalikan' => Peminjaman::countByStatus(
+                'dikembalikan'
+            ),
+
+            'bukuTerbaru' => Buku::getLatest(5),
         ]);
     }
 }

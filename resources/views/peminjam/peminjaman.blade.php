@@ -13,7 +13,7 @@
                 <div>
 
                     <h3>
-                        {{ $p->buku->judul_buku }}
+                        {{ $p->judul_buku }}
                     </h3>
 
                     <p class="tanggal">

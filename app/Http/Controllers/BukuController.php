@@ -9,79 +9,95 @@ use Illuminate\Http\Request;
 
 class BukuController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $buku = Buku::with(['kategori', 'rak'])->get();
+        $buku = Buku::getAll();
 
-        return view('buku.index', compact('buku'));
+        return view(
+            'buku.index',
+            compact('buku')
+        );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        $kategori = Kategori::all();
+        $kategori = Kategori::getAll();
 
-        $rak = Rak::all();
+        $rak = Rak::getAll();
 
-        return view('buku.create', compact('kategori', 'rak'));
+        return view(
+            'buku.create',
+            compact(
+                'kategori',
+                'rak'
+            )
+        );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        Buku::create($request->all());
+        Buku::insertData(
+            $request->all()
+        );
 
-        return redirect()->route('buku.index');
+        return redirect()
+            ->route('buku.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show($id)
     {
-        $buku = Buku::with(['kategori', 'rak'])->find($id);
+        $buku = Buku::getById($id);
 
-        return view('buku.show', compact('buku'));
+        if (! $buku) {
+            abort(404);
+        }
+
+        return view(
+            'buku.show',
+            compact('buku')
+        );
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
-        $buku = Buku::find($id);
-        $kategori = Kategori::all();
+        $buku = Buku::getById($id);
 
-        $rak = Rak::all();
+        if (! $buku) {
+            abort(404);
+        }
 
-        return view('buku.edit', compact('buku', 'kategori', 'rak'));
+        $kategori = Kategori::getAll();
+
+        $rak = Rak::getAll();
+
+        return view(
+            'buku.edit',
+            compact(
+                'buku',
+                'kategori',
+                'rak'
+            )
+        );
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
-    {
-        $buku = Buku::find($id);
-        $buku->update($request->all());
+    public function update(
+        Request $request,
+        $id
+    ) {
+        Buku::updateData(
+            $id,
+            $request->all()
+        );
 
-        return redirect()->route('buku.index');
+        return redirect()
+            ->route('buku.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
-        Buku::destroy($id);
+        Buku::deleteData($id);
 
-        return redirect()->route('buku.index');
+        return redirect()
+            ->route('buku.index');
     }
 }

@@ -44,7 +44,7 @@
                         <td class="judul">📘 {{ $b->judul_buku }}</td>
                         <td>
                             <span class="badge">
-                                {{ $b->kategori->nama_kategori ?? '-' }}
+                                {{ $b->nama_kategori ?? '-' }}
                             </span>
                         </td>
                     </tr>

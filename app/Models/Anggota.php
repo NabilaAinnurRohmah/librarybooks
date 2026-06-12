@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Anggota extends Model
 {
@@ -15,13 +16,60 @@ class Anggota extends Model
 
     protected $primaryKey = 'id_anggota';
 
-    public function pengguna()
+    public static function getAll()
     {
-        return $this->belongsTo(Pengguna::class, 'id_pengguna');
+        return DB::table('anggota')->get();
     }
 
-    public function peminjaman()
+    public static function getById($id)
     {
-        return $this->hasMany(Peminjaman::class, 'id_anggota');
+        return DB::table('anggota')
+            ->leftJoin(
+                'pengguna',
+                'anggota.id_pengguna',
+                '=',
+                'pengguna.id_pengguna'
+            )
+            ->select(
+                'anggota.*',
+                'pengguna.username',
+                'pengguna.role'
+            )
+            ->where('anggota.id_anggota', $id)
+            ->first();
+    }
+
+    public static function getWithoutPengguna()
+    {
+        return DB::table('anggota')
+            ->whereNull('id_pengguna')
+            ->get();
+    }
+
+    public static function insertData($data)
+    {
+        return DB::table('anggota')
+            ->insert($data);
+    }
+
+    public static function updateData($id, $data)
+    {
+        return DB::table('anggota')
+            ->where('id_anggota', $id)
+            ->update($data);
+    }
+
+    public static function deleteData($id)
+    {
+        return DB::table('anggota')
+            ->where('id_anggota', $id)
+            ->delete();
+    }
+
+    public static function getByPengguna($id_pengguna)
+    {
+        return DB::table('anggota')
+            ->where('id_pengguna', $id_pengguna)
+            ->first();
     }
 }

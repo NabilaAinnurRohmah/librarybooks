@@ -6,7 +6,7 @@
     <div class="detail-card">
         <div class="detail-row">
             <div class="label">Nama</div>
-            <div class="value">{{ $data->anggota->nama }}</div>
+            <div class="value">{{ $data->nama }}</div>
         </div>
 
         <div class="detail-row">
@@ -16,7 +16,7 @@
 
         <div class="detail-row">
             <div class="label">Buku</div>
-            <div class="value">{{ $data->buku->judul_buku }}</div>
+            <div class="value">{{ $data->judul_buku }}</div>
         </div>
 
         <div class="detail-row">

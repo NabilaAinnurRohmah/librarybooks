@@ -37,7 +37,7 @@
 
                         <td>
                             <span class="badge-durasi">
-                                {{ $item->buku->count() }} Buku
+                                {{ $item->jumlah_buku }} Buku
                             </span>
                         </td>
 

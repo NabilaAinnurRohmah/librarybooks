@@ -2,32 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Buku;
 use App\Models\Rak;
 use Illuminate\Http\Request;
 
 class RakController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $rak = Rak::with('buku')->get();
+        $rak = Rak::getAllWithBuku();
 
-        return view('rak.index', compact('rak'));
+        return view(
+            'rak.index',
+            compact('rak')
+        );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('rak.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -35,55 +30,67 @@ class RakController extends Controller
             'lokasi' => 'required',
         ]);
 
-        Rak::create($request->all());
+        Rak::insertData([
+            'nama_rak' => $request->nama_rak,
+            'lokasi' => $request->lokasi,
+        ]);
 
-        return redirect()->route('rak.index');
+        return redirect()
+            ->route('rak.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show($id)
     {
-        $rak = Rak::with('buku')->findOrFail($id);
+        $rak = Rak::getById($id);
 
-        return view('rak.show', compact('rak'));
+        $buku = Buku::getByRak($id);
+
+        return view(
+            'rak.show',
+            compact('rak', 'buku')
+        );
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
-        $rak = Rak::findOrFail($id);
+        $rak = Rak::getById($id);
 
-        return view('rak.edit', compact('rak'));
+        if (! $rak) {
+            abort(404);
+        }
+
+        return view(
+            'rak.edit',
+            compact('rak')
+        );
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
-    {
-        $rak = Rak::findOrFail($id);
-
+    public function update(
+        Request $request,
+        $id
+    ) {
         $request->validate([
             'nama_rak' => 'required',
             'lokasi' => 'required',
         ]);
 
-        $rak->update($request->all());
+        Rak::updateData(
+            $id,
+            [
+                'nama_rak' => $request->nama_rak,
+                'lokasi' => $request->lokasi,
+            ]
+        );
 
-        return redirect()->route('rak.index');
+        return redirect()
+            ->route('rak.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
-        Rak::destroy($id);
+        Rak::deleteData($id);
 
-        return redirect()->route('rak.index');
+        return redirect()
+            ->route('rak.index');
     }
 }

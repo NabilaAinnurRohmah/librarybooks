@@ -17,7 +17,7 @@
 
         <div class="detail-row">
             <div class="label">Jumlah Buku</div>
-            <div class="value">{{ $rak->buku->count() }} Buku</div>
+            <div class="value">{{ $buku->count() }} Buku</div>
         </div>
 
         <hr>
@@ -37,14 +37,14 @@
 
             <tbody>
 
-                @forelse($rak->buku as $item)
+                @forelse($buku as $item)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
 
                         <td>{{ $item->judul_buku }}</td>
 
                         <td>
-                            {{ $item->kategori->nama_kategori ?? '-' }}
+                            {{ $item->nama_kategori ?? '-' }}
                         </td>
 
                         <td>

@@ -37,12 +37,12 @@
 
                         <p>
                             <b>Kategori:</b>
-                            {{ $b->kategori->nama_kategori ?? '-' }}
+                            {{ $b->nama_kategori ?? '-' }}
                         </p>
 
                         <p>
                             <b>Rak:</b>
-                            {{ $b->rak->nama_rak ?? '-' }}
+                            {{ $b->nama_rak ?? '-' }}
                         </p>
 
                         <p>

@@ -25,13 +25,13 @@
                         <td>{{ $b->pengarang }}</td>
                         <td>
                             <span class="badge">
-                                {{ $b->kategori->nama_kategori ?? '-' }}
+                                {{ $b->nama_kategori ?? '-' }}
                             </span>
                         </td>
 
                         <td>
                             <span class="badge">
-                                {{ $b->rak->nama_rak ?? '-' }}
+                                {{ $b->nama_rak ?? '-' }}
                             </span>
                         </td>
 

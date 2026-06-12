@@ -15,19 +15,33 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $pengguna = Pengguna::cekLogin($request->username, $request->password);
+        $pengguna = Pengguna::cekLogin(
+            $request->username,
+            $request->password
+        );
 
         if (! $pengguna) {
-            return back()->with('error', 'Username atau Password salah');
+
+            return back()->with(
+                'error',
+                'Username atau Password salah'
+            );
         }
 
         $anggota = null;
 
         if ($pengguna->role === 'peminjam') {
-            $anggota = Anggota::where('id_pengguna', $pengguna->id_pengguna)->first();
+
+            $anggota = Anggota::getByPengguna(
+                $pengguna->id_pengguna
+            );
 
             if (! $anggota) {
-                return back()->with('error', 'Akun peminjam belum terhubung dengan data anggota');
+
+                return back()->with(
+                    'error',
+                    'Akun peminjam belum terhubung dengan data anggota'
+                );
             }
         }
 
@@ -40,7 +54,9 @@ class AuthController extends Controller
         ]);
 
         return redirect()->route(
-            $pengguna->role == 'admin' ? 'dashboard' : 'peminjam.buku'
+            $pengguna->role == 'admin'
+                ? 'dashboard'
+                : 'peminjam.buku'
         );
     }
 

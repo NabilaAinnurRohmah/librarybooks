@@ -29,7 +29,7 @@
             <div class="label">Kategori</div>
             <div>
                 <span class="badge">
-                    {{ $buku->kategori->nama_kategori ?? '-' }}
+                    {{ $buku->nama_kategori ?? '-' }}
                 </span>
             </div>
         </div>
@@ -38,7 +38,7 @@
             <div class="label">Rak</div>
             <div>
                 <span class="badge">
-                    {{ $buku->rak->nama_rak ?? '-' }}
+                    {{ $buku->nama_rak ?? '-' }}
                 </span>
             </div>
         </div>
