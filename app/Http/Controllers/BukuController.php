@@ -13,9 +13,7 @@ class BukuController extends Controller
     {
         $buku = Buku::getAll();
 
-        return view(
-            'buku.index',
-            compact('buku')
+        return view( 'buku.index', compact('buku')
         );
     }
 
@@ -25,23 +23,15 @@ class BukuController extends Controller
 
         $rak = Rak::getAll();
 
-        return view(
-            'buku.create',
-            compact(
-                'kategori',
-                'rak'
-            )
+        return view('buku.create', compact( 'kategori', 'rak')
         );
     }
 
     public function store(Request $request)
     {
-        Buku::insertData(
-            $request->all()
-        );
+        Buku::insertData( $request->except('_token') );
 
-        return redirect()
-            ->route('buku.index');
+        return redirect()->route('buku.index');
     }
 
     public function show($id)
@@ -52,10 +42,7 @@ class BukuController extends Controller
             abort(404);
         }
 
-        return view(
-            'buku.show',
-            compact('buku')
-        );
+        return view( 'buku.show', compact('buku') );
     }
 
     public function edit($id)
@@ -70,34 +57,20 @@ class BukuController extends Controller
 
         $rak = Rak::getAll();
 
-        return view(
-            'buku.edit',
-            compact(
-                'buku',
-                'kategori',
-                'rak'
-            )
-        );
+        return view( 'buku.edit', compact( 'buku', 'kategori', 'rak') );
     }
 
-    public function update(
-        Request $request,
-        $id
-    ) {
-        Buku::updateData(
-            $id,
-            $request->all()
-        );
+    public function update( Request $request, $id)
+    {
+        Buku::updateData( $id, $request->except('_token', '_method') );
 
-        return redirect()
-            ->route('buku.index');
+        return redirect()->route('buku.index');
     }
 
     public function destroy($id)
     {
         Buku::deleteData($id);
 
-        return redirect()
-            ->route('buku.index');
+        return redirect()->route('buku.index');
     }
 }

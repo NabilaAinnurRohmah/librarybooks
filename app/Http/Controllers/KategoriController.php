@@ -11,10 +11,7 @@ class KategoriController extends Controller
     {
         $kategori = Kategori::getAll();
 
-        return view(
-            'kategori.index',
-            compact('kategori')
-        );
+        return view('kategori.index', compact('kategori'));
     }
 
     public function create()
@@ -24,12 +21,9 @@ class KategoriController extends Controller
 
     public function store(Request $request)
     {
-        Kategori::insertData(
-            $request->all()
-        );
+        Kategori::insertData($request->except('_token'));
 
-        return redirect()
-            ->route('kategori.index');
+        return redirect()->route('kategori.index');
     }
 
     public function show($id)
@@ -40,10 +34,7 @@ class KategoriController extends Controller
             abort(404);
         }
 
-        return view(
-            'kategori.show',
-            compact('kategori')
-        );
+        return view('kategori.show', compact('kategori'));
     }
 
     public function edit($id)
@@ -54,30 +45,20 @@ class KategoriController extends Controller
             abort(404);
         }
 
-        return view(
-            'kategori.edit',
-            compact('kategori')
-        );
+        return view('kategori.edit', compact('kategori'));
     }
 
-    public function update(
-        Request $request,
-        $id
-    ) {
-        Kategori::updateData(
-            $id,
-            $request->all()
-        );
+    public function update(Request $request,$id)
+    {
+        Kategori::updateData($id, $request->except('_token', '_method'));
 
-        return redirect()
-            ->route('kategori.index');
+        return redirect()->route('kategori.index');
     }
 
     public function destroy($id)
     {
         Kategori::deleteData($id);
 
-        return redirect()
-            ->route('kategori.index');
+        return redirect()->route('kategori.index');
     }
 }

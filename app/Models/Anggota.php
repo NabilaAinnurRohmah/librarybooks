@@ -24,17 +24,8 @@ class Anggota extends Model
     public static function getById($id)
     {
         return DB::table('anggota')
-            ->leftJoin(
-                'pengguna',
-                'anggota.id_pengguna',
-                '=',
-                'pengguna.id_pengguna'
-            )
-            ->select(
-                'anggota.*',
-                'pengguna.username',
-                'pengguna.role'
-            )
+            ->leftJoin('pengguna', 'anggota.id_pengguna', '=', 'pengguna.id_pengguna')
+            ->select('anggota.*', 'pengguna.username')
             ->where('anggota.id_anggota', $id)
             ->first();
     }

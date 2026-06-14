@@ -38,9 +38,8 @@
                 </select>
             </div>
 
-            <div>
+            <div class="form-group">
                 <label>Rak</label>
-
                 <select name="id_rak">
                     @foreach ($rak as $item)
                         <option value="{{ $item->id_rak }}">

@@ -43,7 +43,7 @@
                 <label>Rak</label>
                 <select name="id_rak">
                     @foreach ($rak as $r)
-                        <option value="{{ $r->id_rak }}" {{ $buku->id_rak == $k->id_rak ? 'selected' : '' }}>
+                        <option value="{{ $r->id_rak }}" {{ $buku->id_rak == $r->id_rak ? 'selected' : '' }}>
                             {{ $r->nama_rak }}
                         </option>
                     @endforeach

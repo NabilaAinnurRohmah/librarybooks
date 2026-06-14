@@ -12,10 +12,7 @@ class RakController extends Controller
     {
         $rak = Rak::getAllWithBuku();
 
-        return view(
-            'rak.index',
-            compact('rak')
-        );
+        return view('rak.index', compact('rak'));
     }
 
     public function create()
@@ -35,8 +32,7 @@ class RakController extends Controller
             'lokasi' => $request->lokasi,
         ]);
 
-        return redirect()
-            ->route('rak.index');
+        return redirect()->route('rak.index');
     }
 
     public function show($id)
@@ -45,10 +41,7 @@ class RakController extends Controller
 
         $buku = Buku::getByRak($id);
 
-        return view(
-            'rak.show',
-            compact('rak', 'buku')
-        );
+        return view('rak.show', compact('rak', 'buku'));
     }
 
     public function edit($id)
@@ -59,38 +52,31 @@ class RakController extends Controller
             abort(404);
         }
 
-        return view(
-            'rak.edit',
-            compact('rak')
+        return view('rak.edit', compact('rak')
         );
     }
 
-    public function update(
-        Request $request,
-        $id
+    public function update(Request $request, $id
     ) {
         $request->validate([
             'nama_rak' => 'required',
             'lokasi' => 'required',
         ]);
 
-        Rak::updateData(
-            $id,
+        Rak::updateData($id,
             [
                 'nama_rak' => $request->nama_rak,
                 'lokasi' => $request->lokasi,
             ]
         );
 
-        return redirect()
-            ->route('rak.index');
+        return redirect()->route('rak.index');
     }
 
     public function destroy($id)
     {
         Rak::deleteData($id);
 
-        return redirect()
-            ->route('rak.index');
+        return redirect()->route('rak.index');
     }
 }

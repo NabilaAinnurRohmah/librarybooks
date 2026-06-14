@@ -16,27 +16,18 @@ class AnggotaController extends Controller
 
             if (! empty($anggota->alamat)) {
 
-                $anggota->alamat =
-                    Pengguna::decrypt(
-                        $anggota->alamat
-                    );
+                $anggota->alamat = Pengguna::decrypt( $anggota->alamat );
             }
         }
 
-        return view(
-            'anggota.index',
-            compact('data')
-        );
+        return view( 'anggota.index', compact('data'));
     }
 
     public function create()
     {
         $anggota = Anggota::getWithoutPengguna();
 
-        return view(
-            'anggota.create',
-            compact('anggota')
-        );
+        return view('anggota.create', compact('anggota'));
     }
 
     public function store(Request $request)
@@ -48,9 +39,8 @@ class AnggotaController extends Controller
             'password' => 'required|min:4',
             'alamat' => 'nullable',
             'no_hp' => 'nullable',
-        ], [
-            'username.unique' => 'Username sudah digunakan.',
-        ]);
+        ],
+        ['username.unique' => 'Username sudah digunakan.',]);
 
         $id_pengguna = Pengguna::insertData([
             'username' => $request->username,
@@ -71,13 +61,8 @@ class AnggotaController extends Controller
 
             Anggota::insertData([
                 'nama' => $request->nama,
-
-                'alamat' => $request->alamat
-                    ? Pengguna::encrypt($request->alamat)
-                    : null,
-
+                'alamat' => $request->alamat ? Pengguna::encrypt($request->alamat) : null,
                 'no_hp' => $request->no_hp,
-
                 'id_pengguna' => $id_pengguna,
             ]);
 
@@ -96,16 +81,10 @@ class AnggotaController extends Controller
 
         if (! empty($data->alamat)) {
 
-            $data->alamat =
-                Pengguna::decrypt(
-                    $data->alamat
-                );
+            $data->alamat = Pengguna::decrypt( $data->alamat );
         }
 
-        return view(
-            'anggota.show',
-            compact('data')
-        );
+        return view('anggota.show', compact('data'));
     }
 
     public function edit(string $id)
@@ -118,16 +97,10 @@ class AnggotaController extends Controller
 
         if (! empty($data->alamat)) {
 
-            $data->alamat =
-                Pengguna::decrypt(
-                    $data->alamat
-                );
+            $data->alamat = Pengguna::decrypt( $data->alamat );
         }
 
-        return view(
-            'anggota.edit',
-            compact('data')
-        );
+        return view('anggota.edit', compact('data'));
     }
 
     public function update(Request $request, string $id)
@@ -140,9 +113,7 @@ class AnggotaController extends Controller
 
         $request->validate([
             'nama' => 'required',
-            'username' => 'required|unique:pengguna,username,'.
-                ($data->id_pengguna ?? 'NULL').
-                ',id_pengguna',
+            'username' => 'required|unique:pengguna,username,'. ($data->id_pengguna ?? 'NULL'). ',id_pengguna',
             'password' => 'nullable|min:4',
             'alamat' => 'nullable',
             'no_hp' => 'nullable',
@@ -150,11 +121,7 @@ class AnggotaController extends Controller
 
         Anggota::updateData($id, [
             'nama' => $request->nama,
-
-            'alamat' => $request->alamat
-                ? Pengguna::encrypt($request->alamat)
-                : null,
-
+            'alamat' => $request->alamat ? Pengguna::encrypt($request->alamat) : null,
             'no_hp' => $request->no_hp,
         ]);
 
@@ -172,9 +139,7 @@ class AnggotaController extends Controller
 
         } else {
 
-            $pengguna = Pengguna::getById(
-                $data->id_pengguna
-            );
+            $pengguna = Pengguna::getById($data->id_pengguna);
 
             if ($pengguna) {
 
@@ -184,10 +149,7 @@ class AnggotaController extends Controller
 
                 if ($request->password) {
 
-                    $updateData['password'] =
-                        Pengguna::encrypt(
-                            $request->password
-                        );
+                    $updateData['password'] = Pengguna::encrypt( $request->password );
                 }
 
                 Pengguna::updateData(
@@ -218,10 +180,7 @@ class AnggotaController extends Controller
         return redirect()
             ->route('anggota.index')
             ->with(
-                'success',
-                'Kartu anggota '.
-                $anggota->nama.
-                ' berhasil dicetak.'
+                'success', 'Kartu anggota '. $anggota->nama.' berhasil dicetak.'
             );
     }
 }

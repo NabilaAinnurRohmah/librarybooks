@@ -15,17 +15,12 @@ class PeminjamanController extends Controller
 
         foreach ($data as $item) {
 
-            $item->durasi =
-                Peminjaman::getDurasi($item);
+            $item->durasi = Peminjaman::getDurasi($item);
 
-            $item->keterlambatan =
-                Peminjaman::getKeterlambatan($item);
+            $item->keterlambatan = Peminjaman::getKeterlambatan($item);
         }
 
-        return view(
-            'peminjaman.index',
-            compact('data')
-        );
+        return view( 'peminjaman.index', compact('data'));
     }
 
     public function create()
@@ -34,13 +29,7 @@ class PeminjamanController extends Controller
 
         $buku = Buku::getAll();
 
-        return view(
-            'peminjaman.create',
-            compact(
-                'anggota',
-                'buku'
-            )
-        );
+        return view('peminjaman.create', compact('anggota', 'buku'));
     }
 
     public function store(Request $request)
@@ -52,21 +41,15 @@ class PeminjamanController extends Controller
             'jatuh_tempo' => 'required|date|after_or_equal:tanggal_pinjam',
         ]);
 
-        $buku = Buku::getById(
-            $request->id_buku
-        );
+        $buku = Buku::getById($request->id_buku);
 
         if ($buku->stok <= 0) {
 
             return back()->with(
-                'error',
-                'Stok buku habis!'
-            );
+                'error', 'Stok buku habis!');
         }
 
-        Buku::kurangiStok(
-            $request->id_buku
-        );
+        Buku::kurangiStok( $request->id_buku);
 
         Peminjaman::insertData([
             'id_anggota' => $request->id_anggota,
@@ -76,8 +59,7 @@ class PeminjamanController extends Controller
             'status' => 'dipinjam',
         ]);
 
-        return redirect()
-            ->route('peminjaman.index');
+        return redirect()->route('peminjaman.index');
     }
 
     public function show(string $id)
@@ -88,16 +70,11 @@ class PeminjamanController extends Controller
             abort(404);
         }
 
-        $data->durasi =
-            Peminjaman::getDurasi($data);
+        $data->durasi = Peminjaman::getDurasi($data);
 
-        $data->keterlambatan =
-            Peminjaman::getKeterlambatan($data);
+        $data->keterlambatan = Peminjaman::getKeterlambatan($data);
 
-        return view(
-            'peminjaman.show',
-            compact('data')
-        );
+        return view('peminjaman.show', compact('data'));
     }
 
     public function edit(string $id)
@@ -112,20 +89,11 @@ class PeminjamanController extends Controller
 
         $buku = Buku::getAll();
 
-        return view(
-            'peminjaman.edit',
-            compact(
-                'data',
-                'anggota',
-                'buku'
-            )
-        );
+        return view('peminjaman.edit', compact('data', 'anggota','buku'));
     }
 
-    public function update(
-        Request $request,
-        string $id
-    ) {
+    public function update(Request $request,string $id)
+    {
         $request->validate([
             'id_anggota' => 'required',
             'id_buku' => 'required',
@@ -133,8 +101,7 @@ class PeminjamanController extends Controller
             'jatuh_tempo' => 'required|date|after_or_equal:tanggal_pinjam',
         ]);
 
-        Peminjaman::updateData(
-            $id,
+        Peminjaman::updateData($id,
             [
                 'id_anggota' => $request->id_anggota,
                 'id_buku' => $request->id_buku,
@@ -143,8 +110,7 @@ class PeminjamanController extends Controller
             ]
         );
 
-        return redirect()
-            ->route('peminjaman.index');
+        return redirect() ->route('peminjaman.index');
     }
 
     public function destroy(string $id)
@@ -157,18 +123,13 @@ class PeminjamanController extends Controller
 
         if ($data->status == 'dipinjam') {
 
-            Buku::tambahStok(
-                $data->id_buku
-            );
+            Buku::tambahStok($data->id_buku);
         }
 
         Peminjaman::deleteData($id);
 
-        return redirect()
-            ->route('peminjaman.index')
-            ->with(
-                'success',
-                'Data peminjaman berhasil dihapus'
+        return redirect() ->route('peminjaman.index')->with(
+                'success', 'Data peminjaman berhasil dihapus'
             );
     }
 }

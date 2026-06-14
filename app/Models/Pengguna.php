@@ -164,19 +164,14 @@ class Pengguna extends Model
     public static function cekLogin($username, $password)
     {
         $user = DB::table('pengguna')
-            ->where(
-                'username',
-                $username
-            )
+            ->where('username', $username)
             ->first();
 
         if (! $user) {
             return null;
         }
 
-        $passwordDb = self::decrypt(
-            $user->password
-        );
+        $passwordDb = self::decrypt($user->password);
 
         if ($passwordDb === $password) {
 

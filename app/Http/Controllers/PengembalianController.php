@@ -12,41 +12,25 @@ class PengembalianController extends Controller
 
         foreach ($data as $item) {
 
-            $item->durasi =
-                Peminjaman::getDurasi($item);
+            $item->durasi = Peminjaman::getDurasi($item);
 
-            $item->keterlambatan =
-                Peminjaman::getKeterlambatan($item);
+            $item->keterlambatan = Peminjaman::getKeterlambatan($item);
         }
 
-        return view(
-            'pengembalian.index',
-            compact('data')
-        );
+        return view('pengembalian.index', compact('data'));
     }
 
     public function kembali($id)
     {
-        $hasil = Peminjaman::prosesPengembalian(
-            $id
-        );
+        $hasil = Peminjaman::prosesPengembalian($id);
 
         if (! $hasil) {
-
-            return redirect()
-                ->route('pengembalian.index')
-                ->with(
-                    'error',
-                    'Data tidak ditemukan'
-                );
+            return redirect()->route('pengembalian.index')->with(
+                    'error', 'Data tidak ditemukan');
         }
 
-        return redirect()
-            ->route('pengembalian.index')
-            ->with(
-                'success',
-                'Buku berhasil dikembalikan'
-            );
+        return redirect()->route('pengembalian.index')->with(
+                'success', 'Buku berhasil dikembalikan');
     }
 
     public function destroy($id)
@@ -59,11 +43,7 @@ class PengembalianController extends Controller
 
         Peminjaman::deleteData($id);
 
-        return redirect()
-            ->route('pengembalian.index')
-            ->with(
-                'success',
-                'Data pengembalian berhasil dihapus'
-            );
+        return redirect()->route('pengembalian.index')->with(
+                'success', 'Data pengembalian berhasil dihapus');
     }
 }

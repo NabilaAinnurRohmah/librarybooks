@@ -12,19 +12,14 @@ class UserPeminjamController extends Controller
     {
         if ($request->search) {
 
-            $buku = Buku::search(
-                $request->search
-            );
+            $buku = Buku::search($request->search);
 
         } else {
 
             $buku = Buku::getAll();
         }
 
-        return view(
-            'peminjam.buku',
-            compact('buku')
-        );
+        return view('peminjam.buku', compact('buku'));
     }
 
     public function show($id)
@@ -35,17 +30,12 @@ class UserPeminjamController extends Controller
             abort(404);
         }
 
-        return view(
-            'peminjam.detail',
-            compact('buku')
-        );
+        return view('peminjam.detail', compact('buku'));
     }
 
     public function store(Request $request)
     {
-        $buku = Buku::getById(
-            $request->id_buku
-        );
+        $buku = Buku::getById($request->id_buku);
 
         if (! $buku) {
             abort(404);
@@ -53,15 +43,10 @@ class UserPeminjamController extends Controller
 
         if ($buku->stok <= 0) {
 
-            return back()->with(
-                'error',
-                'Stok buku habis'
-            );
+            return back()->with('error', 'Stok buku habis');
         }
 
-        Buku::kurangiStok(
-            $request->id_buku
-        );
+        Buku::kurangiStok( $request->id_buku);
 
         Peminjaman::insertData([
             'id_buku' => $request->id_buku,
@@ -72,9 +57,7 @@ class UserPeminjamController extends Controller
         ]);
 
         return back()->with(
-            'success',
-            'Buku berhasil dipinjam'
-        );
+            'success', 'Buku berhasil dipinjam');
     }
 
     public function peminjaman()
@@ -85,17 +68,12 @@ class UserPeminjamController extends Controller
 
         foreach ($data as $item) {
 
-            $item->durasi =
-                Peminjaman::getDurasi($item);
+            $item->durasi = Peminjaman::getDurasi($item);
 
-            $item->keterlambatan =
-                Peminjaman::getKeterlambatan($item);
+            $item->keterlambatan = Peminjaman::getKeterlambatan($item);
         }
 
-        return view(
-            'peminjam.peminjaman',
-            compact('data')
-        );
+        return view('peminjam.peminjaman', compact('data'));
     }
 
     public function pengembalian()
@@ -106,16 +84,11 @@ class UserPeminjamController extends Controller
 
         foreach ($data as $item) {
 
-            $item->durasi =
-                Peminjaman::getDurasi($item);
+            $item->durasi = Peminjaman::getDurasi($item);
 
-            $item->keterlambatan =
-                Peminjaman::getKeterlambatan($item);
+            $item->keterlambatan = Peminjaman::getKeterlambatan($item);
         }
 
-        return view(
-            'peminjam.pengembalian',
-            compact('data')
-        );
+        return view('peminjam.pengembalian', compact('data'));
     }
 }

@@ -23,8 +23,7 @@ class AuthController extends Controller
         if (! $pengguna) {
 
             return back()->with(
-                'error',
-                'Username atau Password salah'
+                'error', 'Username atau Password salah'
             );
         }
 
@@ -39,8 +38,7 @@ class AuthController extends Controller
             if (! $anggota) {
 
                 return back()->with(
-                    'error',
-                    'Akun peminjam belum terhubung dengan data anggota'
+                    'error', 'Akun peminjam belum terhubung dengan data anggota'
                 );
             }
         }

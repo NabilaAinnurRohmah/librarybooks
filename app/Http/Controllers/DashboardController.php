@@ -12,17 +12,9 @@ class DashboardController extends Controller
     {
         return view('dashboard', [
             'totalBuku' => Buku::countData(),
-
             'totalKategori' => Kategori::countData(),
-
-            'totalDipinjam' => Peminjaman::countByStatus(
-                'dipinjam'
-            ),
-
-            'totalDikembalikan' => Peminjaman::countByStatus(
-                'dikembalikan'
-            ),
-
+            'totalDipinjam' => Peminjaman::countByStatus('dipinjam'),
+            'totalDikembalikan' => Peminjaman::countByStatus('dikembalikan'),
             'bukuTerbaru' => Buku::getLatest(5),
         ]);
     }

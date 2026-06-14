@@ -14,46 +14,18 @@ class Buku extends Model
     public static function getAll()
     {
         return DB::table('buku')
-            ->leftJoin(
-                'kategori_buku',
-                'buku.id_kategori',
-                '=',
-                'kategori_buku.id_kategori'
-            )
-            ->leftJoin(
-                'rak',
-                'buku.id_rak',
-                '=',
-                'rak.id_rak'
-            )
-            ->select(
-                'buku.*',
-                'kategori_buku.nama_kategori',
-                'rak.nama_rak'
-            )
+            ->Join('kategori_buku', 'buku.id_kategori', '=', 'kategori_buku.id_kategori')
+            ->Join('rak', 'buku.id_rak', '=', 'rak.id_rak')
+            ->select('buku.*', 'kategori_buku.nama_kategori', 'rak.nama_rak')
             ->get();
     }
 
     public static function getById($id)
     {
         return DB::table('buku')
-            ->leftJoin(
-                'kategori_buku',
-                'buku.id_kategori',
-                '=',
-                'kategori_buku.id_kategori'
-            )
-            ->leftJoin(
-                'rak',
-                'buku.id_rak',
-                '=',
-                'rak.id_rak'
-            )
-            ->select(
-                'buku.*',
-                'kategori_buku.nama_kategori',
-                'rak.nama_rak'
-            )
+            ->Join('kategori_buku', 'buku.id_kategori', '=', 'kategori_buku.id_kategori')
+            ->Join('rak', 'buku.id_rak', '=', 'rak.id_rak')
+            ->select('buku.*', 'kategori_buku.nama_kategori', 'rak.nama_rak')
             ->where('id_buku', $id)
             ->first();
     }
@@ -80,62 +52,24 @@ class Buku extends Model
     public static function search($search)
     {
         return DB::table('buku')
-            ->leftJoin(
-                'kategori_buku',
-                'buku.id_kategori',
-                '=',
-                'kategori_buku.id_kategori'
-            )
-            ->leftJoin(
-                'rak',
-                'buku.id_rak',
-                '=',
-                'rak.id_rak'
-            )
+            ->Join('kategori_buku', 'buku.id_kategori', '=', 'kategori_buku.id_kategori')
+            ->Join('rak', 'buku.id_rak', '=', 'rak.id_rak')
             ->where(function ($q) use ($search) {
 
-                $q->where(
-                    'judul_buku',
-                    'ilike',
-                    "%{$search}%"
-                )
-                    ->orWhere(
-                        'pengarang',
-                        'ilike',
-                        "%{$search}%"
-                    )
-                    ->orWhere(
-                        'nama_kategori',
-                        'ilike',
-                        "%{$search}%"
-                    )
-                    ->orWhere(
-                        'nama_rak',
-                        'ilike',
-                        "%{$search}%"
-                    );
+                $q->where('judul_buku', 'ilike', "%{$search}%")
+                    ->orWhere('pengarang', 'ilike', "%{$search}%")
+                    ->orWhere('nama_kategori', 'ilike', "%{$search}%")
+                    ->orWhere('nama_rak', 'ilike', "%{$search}%");
             })
-            ->select(
-                'buku.*',
-                'kategori_buku.nama_kategori',
-                'rak.nama_rak'
-            )
+            ->select('buku.*', 'kategori_buku.nama_kategori', 'rak.nama_rak')
             ->get();
     }
 
     public static function getByRak($id_rak)
     {
         return DB::table('buku')
-            ->leftJoin(
-                'kategori_buku',
-                'buku.id_kategori',
-                '=',
-                'kategori_buku.id_kategori'
-            )
-            ->select(
-                'buku.*',
-                'kategori_buku.nama_kategori'
-            )
+            ->Join('kategori_buku', 'buku.id_kategori','=', 'kategori_buku.id_kategori')
+            ->select('buku.*', 'kategori_buku.nama_kategori')
             ->where('buku.id_rak', $id_rak)
             ->get();
     }
@@ -163,16 +97,8 @@ class Buku extends Model
     public static function getLatest($limit = 5)
     {
         return DB::table('buku')
-            ->leftJoin(
-                'kategori_buku',
-                'buku.id_kategori',
-                '=',
-                'kategori_buku.id_kategori'
-            )
-            ->select(
-                'buku.*',
-                'kategori_buku.nama_kategori'
-            )
+            ->Join('kategori_buku', 'buku.id_kategori', '=', 'kategori_buku.id_kategori')
+            ->select('buku.*', 'kategori_buku.nama_kategori')
             ->orderByDesc('buku.id_buku')
             ->limit($limit)
             ->get();

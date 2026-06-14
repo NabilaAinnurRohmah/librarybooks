@@ -23,25 +23,14 @@ class RegisterController extends Controller
 
         Anggota::insertData([
             'nama' => $request->nama,
-
-            'alamat' => $request->alamat
-                ? Pengguna::encrypt(
-                    $request->alamat
-                )
-                : null,
-
+            'alamat' => $request->alamat ? Pengguna::encrypt($request->alamat) : null,
             'no_hp' => $request->no_hp,
-
             'id_pengguna' => null,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
-        return redirect()
-            ->route('login')
-            ->with(
-                'success',
-                'Pendaftaran berhasil, silahkan mendatangi petugas untuk mendapatkan akun'
-            );
+        return redirect()->route('login')->with(
+                'success', 'Pendaftaran berhasil, silahkan mendatangi petugas untuk mendapatkan akun');
     }
 }

@@ -23,20 +23,27 @@ class Kategori extends Model
             ->first();
     }
 
+    public static function insertData($kategori)
+    {
+        return DB::table('kategori_buku')->insert($kategori);
+    }
+
+    public static function updateData($id, $kategori)
+    {
+        return DB::table('kategori_buku')
+            ->where('id_kategori', $id)
+            ->update($kategori);
+    }
+
     public static function search($search)
     {
         return DB::table('kategori_buku')
-            ->where(
-                'nama_kategori',
-                'ilike',
-                "%{$search}%"
-            )
+            ->where('nama_kategori', 'ilike', "%{$search}%")
             ->get();
     }
 
     public static function countData()
     {
-        return DB::table('kategori_buku')
-            ->count();
+        return DB::table('kategori_buku')->count();
     }
 }

@@ -23,35 +23,31 @@ class Rak extends Model
             ->first();
     }
 
+    public static function insertData($rak)
+    {
+        return DB::table('rak')->insert($rak);
+    }
+
+    public static function updateData($id, $rak)
+    {
+        return DB::table('rak')
+            ->where('id_rak', $id)
+            ->update($rak);
+    }
+
     public static function search($search)
     {
         return DB::table('rak')
-            ->where(
-                'nama_rak',
-                'ilike',
-                "%{$search}%"
-            )
+            ->where('nama_rak', 'ilike', "%{$search}%")
             ->get();
     }
 
     public static function getAllWithBuku()
     {
         return DB::table('rak')
-            ->leftJoin(
-                'buku',
-                'rak.id_rak',
-                '=',
-                'buku.id_rak'
-            )
-            ->select(
-                'rak.*',
-                DB::raw('COUNT(buku.id_buku) as jumlah_buku')
-            )
-            ->groupBy(
-                'rak.id_rak',
-                'rak.nama_rak',
-                'rak.lokasi'
-            )
+            ->leftJoin('buku', 'rak.id_rak', '=', 'buku.id_rak')
+            ->select('rak.*', DB::raw('COUNT(buku.id_buku) as jumlah_buku'))
+            ->groupBy('rak.id_rak', 'rak.nama_rak', 'rak.lokasi')
             ->get();
     }
 
