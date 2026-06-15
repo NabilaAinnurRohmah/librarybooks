@@ -7,9 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 class Buku extends Model
 {
-    protected $table = 'buku';
-
-    protected $primaryKey = 'id_buku';
 
     public static function getAll()
     {
@@ -32,11 +29,16 @@ class Buku extends Model
 
     public static function insertData($data)
     {
+        $data['created_at'] = now();
+        $data['updated_at'] = now();
+
         return DB::table('buku')->insert($data);
     }
 
     public static function updateData($id, $data)
     {
+        $data['updated_at'] = now();
+
         return DB::table('buku')
             ->where('id_buku', $id)
             ->update($data);

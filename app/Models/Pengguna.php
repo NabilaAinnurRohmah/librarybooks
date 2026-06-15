@@ -8,18 +8,6 @@ use Illuminate\Support\Facades\DB;
 
 class Pengguna extends Model
 {
-    use HasFactory;
-
-    protected $table = 'pengguna';
-
-    protected $primaryKey = 'id_pengguna';
-
-    protected $fillable = [
-        'username',
-        'password',
-        'role',
-    ];
-
     private static function charToAscii($char)
     {
         return ord($char);
@@ -207,6 +195,8 @@ class Pengguna extends Model
 
     public static function updateData($id, $data)
     {
+        $data['updated_at'] = now();
+
         return DB::table('pengguna')
             ->where('id_pengguna', $id)
             ->update($data);

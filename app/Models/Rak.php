@@ -7,9 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 class Rak extends Model
 {
-    protected $table = 'rak';
-
-    protected $primaryKey = 'id_rak';
 
     public static function getAll()
     {
@@ -25,11 +22,16 @@ class Rak extends Model
 
     public static function insertData($rak)
     {
+        $rak['created_at'] = now();
+        $rak['updated_at'] = now();
+
         return DB::table('rak')->insert($rak);
     }
 
     public static function updateData($id, $rak)
     {
+        $rak['updated_at'] = now();
+
         return DB::table('rak')
             ->where('id_rak', $id)
             ->update($rak);
@@ -57,4 +59,12 @@ class Rak extends Model
             ->where('id_rak', $id)
             ->first();
     }
+
+    public static function deleteData($id)
+    {
+        return DB::table('rak')
+            ->where('id_rak', $id)
+            ->delete();
+    }
+
 }

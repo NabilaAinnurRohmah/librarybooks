@@ -8,9 +8,6 @@ use Illuminate\Support\Facades\DB;
 
 class Peminjaman extends Model
 {
-    protected $table = 'peminjaman';
-
-    protected $primaryKey = 'id_peminjaman';
 
     public static function getAllDipinjam()
     {
@@ -35,12 +32,17 @@ class Peminjaman extends Model
 
     public static function insertData($data)
     {
+        $data['created_at'] = now();
+        $data['updated_at'] = now();
+
         return DB::table('peminjaman')
             ->insert($data);
     }
 
     public static function updateData($id, $data)
     {
+        $data['updated_at'] = now();
+
         return DB::table('peminjaman')
             ->where('id_peminjaman', $id)
             ->update($data);

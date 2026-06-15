@@ -8,13 +8,6 @@ use Illuminate\Support\Facades\DB;
 
 class Anggota extends Model
 {
-    use HasFactory;
-
-    protected $table = 'anggota';
-
-    protected $fillable = ['nama', 'alamat', 'no_hp', 'id_pengguna'];
-
-    protected $primaryKey = 'id_anggota';
 
     public static function getAll()
     {
@@ -48,6 +41,8 @@ class Anggota extends Model
 
     public static function updateData($id, $data)
     {
+        $data['updated_at'] = now();
+
         return DB::table('anggota')
             ->where('id_anggota', $id)
             ->update($data);
