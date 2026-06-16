@@ -53,12 +53,6 @@ class Rak extends Model
             ->get();
     }
 
-    public static function getByIdWithBuku($id)
-    {
-        return DB::table('rak')
-            ->where('id_rak', $id)
-            ->first();
-    }
 
     public static function deleteData($id)
     {
