@@ -31,7 +31,7 @@
 
         <div class="detail-row">
             <div class="label">Durasi</div>
-            <div class="value">{{ $data->durasi ? $data->durasi . ' hari' : '-' }}</div>
+            <div class="value">{{ $data->durasi ? $data->durasi . ' hari' : '0 hari' }}</div>
         </div>
 
         <div class="detail-row">
