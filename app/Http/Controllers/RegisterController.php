@@ -17,17 +17,15 @@ class RegisterController extends Controller
     {
         $request->validate([
             'nama' => 'required',
-            'alamat' => 'nullable',
-            'no_hp' => 'nullable',
+            'alamat' => 'required',
+            'no_hp' => 'required',
         ]);
 
         Anggota::insertData([
             'nama' => $request->nama,
-            'alamat' => $request->alamat ? Pengguna::encrypt($request->alamat) : null,
+            'alamat' => Pengguna::encrypt($request->alamat),
             'no_hp' => $request->no_hp,
             'id_pengguna' => null,
-            'created_at' => now(),
-            'updated_at' => now(),
         ]);
 
         return redirect()->route('login')->with(

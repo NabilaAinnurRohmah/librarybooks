@@ -62,7 +62,7 @@ class PeminjamanController extends Controller
         return redirect()->route('peminjaman.index');
     }
 
-    public function show(string $id)
+    public function show($id)
     {
         $data = Peminjaman::getById($id);
 
@@ -77,7 +77,7 @@ class PeminjamanController extends Controller
         return view('peminjaman.show', compact('data'));
     }
 
-    public function edit(string $id)
+    public function edit($id)
     {
         $data = Peminjaman::getById($id);
 
@@ -92,7 +92,7 @@ class PeminjamanController extends Controller
         return view('peminjaman.edit', compact('data', 'anggota','buku'));
     }
 
-    public function update(Request $request,string $id)
+    public function update(Request $request,$id)
     {
         $request->validate([
             'id_anggota' => 'required',
@@ -113,7 +113,7 @@ class PeminjamanController extends Controller
         return redirect() ->route('peminjaman.index');
     }
 
-    public function destroy(string $id)
+    public function destroy($id)
     {
         $data = Peminjaman::getById($id);
 

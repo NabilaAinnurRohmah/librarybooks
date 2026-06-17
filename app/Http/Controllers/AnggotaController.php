@@ -37,8 +37,8 @@ class AnggotaController extends Controller
             'nama' => 'required',
             'username' => 'required|unique:pengguna,username',
             'password' => 'required|min:4',
-            'alamat' => 'nullable',
-            'no_hp' => 'nullable',
+            'alamat' => 'required',
+            'no_hp' => 'required',
         ],
         ['username.unique' => 'Username sudah digunakan.',]);
 
@@ -61,7 +61,7 @@ class AnggotaController extends Controller
 
             Anggota::insertData([
                 'nama' => $request->nama,
-                'alamat' => $request->alamat ? Pengguna::encrypt($request->alamat) : null,
+                'alamat' => Pengguna::encrypt($request->alamat),
                 'no_hp' => $request->no_hp,
                 'id_pengguna' => $id_pengguna,
             ]);
@@ -71,7 +71,7 @@ class AnggotaController extends Controller
         return redirect()->route('anggota.index');
     }
 
-    public function show(string $id)
+    public function show($id)
     {
         $data = Anggota::getById($id);
 
@@ -87,7 +87,7 @@ class AnggotaController extends Controller
         return view('anggota.show', compact('data'));
     }
 
-    public function edit(string $id)
+    public function edit($id)
     {
         $data = Anggota::getById($id);
 
@@ -103,7 +103,7 @@ class AnggotaController extends Controller
         return view('anggota.edit', compact('data'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
         $data = Anggota::getById($id);
 
@@ -115,13 +115,13 @@ class AnggotaController extends Controller
             'nama' => 'required',
             'username' => 'required|unique:pengguna,username,'. ($data->id_pengguna ?? 'NULL'). ',id_pengguna',
             'password' => 'nullable|min:4',
-            'alamat' => 'nullable',
-            'no_hp' => 'nullable',
+            'alamat' => 'required',
+            'no_hp' => 'required',
         ]);
 
         Anggota::updateData($id, [
             'nama' => $request->nama,
-            'alamat' => $request->alamat ? Pengguna::encrypt($request->alamat) : null,
+            'alamat' => Pengguna::encrypt($request->alamat),
             'no_hp' => $request->no_hp,
         ]);
 
@@ -162,7 +162,7 @@ class AnggotaController extends Controller
         return redirect()->route('anggota.index');
     }
 
-    public function destroy(string $id)
+    public function destroy($id)
     {
         Anggota::deleteData($id);
 
